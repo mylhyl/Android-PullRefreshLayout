@@ -29,7 +29,6 @@ import android.widget.ExpandableListView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import com.mylhyl.rslayout.AbsListViewSwipeRefresh;
 import com.mylhyl.rslayout.BaseSwipeRefresh;
 import com.mylhyl.rslayout.OnListLoadListener;
 import com.mylhyl.rslayout.SwipeRefreshListView;
@@ -145,12 +144,12 @@ public abstract class BaseSwipeRefreshFragment extends Fragment implements Swipe
      */
     public final void setListAdapter(ListAdapter adapter) {
         if (mRefreshChildView != null && mRefreshChildView instanceof AbsListView
-                && mSwipeRefresh != null && mSwipeRefresh instanceof AbsListViewSwipeRefresh) {
+                && mSwipeRefresh != null && mSwipeRefresh instanceof SwipeRefreshListView) {
             AbsListView absListView = (AbsListView) mRefreshChildView;
             absListView.setVisibility(View.VISIBLE);
             absListView.setOnItemClickListener(mOnItemClickListener);
 
-            AbsListViewSwipeRefresh absListViewSwipeRefresh = (AbsListViewSwipeRefresh) mSwipeRefresh;
+            SwipeRefreshListView absListViewSwipeRefresh = (SwipeRefreshListView) mSwipeRefresh;
             absListViewSwipeRefresh.setAdapter(adapter);
         }
     }

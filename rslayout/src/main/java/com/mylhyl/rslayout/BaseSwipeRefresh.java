@@ -24,6 +24,10 @@ import android.widget.ListView;
  * Created by hupei on 2016/5/12.
  */
 public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayout {
+    /**
+     * 创建上拉加载提示 view
+     * @return
+     */
     protected abstract View onCreateFooterView();
 
     protected abstract void onAddFooterView();
