@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="types">
-        <item>ListView xml创建</item>
-        <item>ListView 继承SwipeRefreshListFragment</item>
+        <item>ListView layout创建</item>
+        <item>继承 SwipeRefreshListFragment</item>
+        <item>继承 SwipeRefreshExpandableListFragment</item>
     </string-array>
 </resources>

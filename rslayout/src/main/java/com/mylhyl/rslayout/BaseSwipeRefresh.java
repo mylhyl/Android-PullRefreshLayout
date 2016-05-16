@@ -2,14 +2,12 @@ package com.mylhyl.rslayout;
 
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 
 /**
  * android v4 兼容包 中 SwipeRefreshLayout 刷新控件，支持上拉加载
@@ -29,12 +27,12 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
      *
      * @return
      */
-    protected abstract View onCreateFooterView();
+    protected abstract View createFooter();
 
     /**
      * 添加上拉加载 View 子类重写
      */
-    protected abstract void onAddFooterView();
+    protected abstract void addFooter();
 
     /**
      * 显示上拉加载 子类重写
@@ -89,7 +87,7 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
                 // 利用 ListView 的 OnScrollListener 滑动事件，解决 RefreshLayout 与 ListView 滑动冲突
                 absListView.setOnScrollListener(new SwipeRefreshOnScrollListener(this));
                 mContentView = (T) absListView;
-                onAddFooterView();
+                addFooter();
                 break;
             }
         }
@@ -134,7 +132,7 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
         this.mOnListLoadListener = onListLoadListener;
         setEnabledLoad(true);
         if (mFooterView == null)
-            mFooterView = onCreateFooterView();//创建上拉加载 View
+            mFooterView = createFooter();//创建上拉加载 View
 
         if (mFooterView == null)
             throw new RuntimeException("call setOnListLoadListener after, abstract method onCreateFooterView cannot return null");

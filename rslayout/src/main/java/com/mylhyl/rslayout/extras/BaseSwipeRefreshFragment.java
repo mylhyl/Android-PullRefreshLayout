@@ -16,6 +16,7 @@
 package com.mylhyl.rslayout.extras;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Gravity;
@@ -43,7 +44,8 @@ import com.mylhyl.rslayout.SwipeRefreshListView;
  * @author hupei
  * @date 2015年7月31日 上午9:05:42
  */
-public abstract class BaseSwipeRefreshFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnListLoadListener {
+abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
+        implements SwipeRefreshLayout.OnRefreshListener, OnListLoadListener {
 
     /**
      * 创建下拉刷新控件 CygSwipeRefreshLayout 子类重写
@@ -61,20 +63,11 @@ public abstract class BaseSwipeRefreshFragment extends Fragment implements Swipe
      * @author hupei
      * @date 2015年10月30日 下午1:48:43
      */
-    public abstract View createRefreshChildView();
+    public abstract T createRefreshChildView();
 
-    private View mRefreshChildView;// SwipeRefreshLayout 的子 view
+    private T mRefreshChildView;// SwipeRefreshLayout 的子 view
     private BaseSwipeRefresh mSwipeRefresh;
     private View mEmptyView;
-
-    private final AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            // TODO item 单点事件
-            onListItemClick(parent, view, position, id);
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,8 +78,8 @@ public abstract class BaseSwipeRefreshFragment extends Fragment implements Swipe
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         // 注册下拉刷新
         mSwipeRefresh.setOnRefreshListener(this);
     }
@@ -129,38 +122,10 @@ public abstract class BaseSwipeRefreshFragment extends Fragment implements Swipe
     }
 
     /**
-     *  {@link BaseSwipeRefresh#setLoading(boolean)}
+     * {@link BaseSwipeRefresh#setLoading(boolean)}
      */
     public final void setLoading(boolean loading) {
         getSwipeRefreshLayout().setLoading(loading);
-    }
-
-    /**
-     * 适配器设置数据源
-     *
-     * @param adapter
-     * @author hupei
-     * @date 2015年7月31日 上午9:06:14
-     */
-    public final void setListAdapter(ListAdapter adapter) {
-        if (mRefreshChildView != null && mRefreshChildView instanceof AbsListView
-                && mSwipeRefresh != null && mSwipeRefresh instanceof SwipeRefreshListView) {
-            AbsListView absListView = (AbsListView) mRefreshChildView;
-            absListView.setVisibility(View.VISIBLE);
-            absListView.setOnItemClickListener(mOnItemClickListener);
-
-            SwipeRefreshListView absListViewSwipeRefresh = (SwipeRefreshListView) mSwipeRefresh;
-            absListViewSwipeRefresh.setAdapter(adapter);
-        }
-    }
-
-    public final void setListAdapter(ExpandableListAdapter adapter) {
-        if (mRefreshChildView != null && mRefreshChildView instanceof ExpandableListView) {
-            ExpandableListView listView = (ExpandableListView) mRefreshChildView;
-            listView.setAdapter(adapter);
-            listView.setVisibility(View.VISIBLE);
-            listView.setOnItemClickListener(mOnItemClickListener);
-        }
     }
 
     /**
@@ -196,7 +161,10 @@ public abstract class BaseSwipeRefreshFragment extends Fragment implements Swipe
      * @date 2015年7月31日 上午9:07:25
      */
     public final void setEmptyViewShown(boolean shown) {
-        if (mRefreshChildView instanceof AbsListView) {
+        if (mRefreshChildView instanceof ExpandableListView) {
+            ExpandableListAdapter adapter = ((ExpandableListView) mRefreshChildView).getExpandableListAdapter();
+            if (adapter == null || adapter.getGroupCount() == 0) return;
+        } else if (mRefreshChildView instanceof AbsListView) {
             AbsListView absListView = (AbsListView) mRefreshChildView;
             ListAdapter adapter = absListView.getAdapter();
             if (adapter == null || adapter.getCount() == 0) return;
@@ -212,7 +180,7 @@ public abstract class BaseSwipeRefreshFragment extends Fragment implements Swipe
         return mSwipeRefresh;
     }
 
-    protected final View getRefreshChildView() {
+    protected final T getRefreshChildView() {
         return mRefreshChildView;
     }
 

@@ -2,21 +2,14 @@ package com.mylhyl.rslayout;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.AbsListView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 /**
- * SwipeRefreshLayout 加 ListView 刷新，可继承此类重写 {@link #onCreateFooterView() 自定义加载框}
- * Created by hupei on 2016/5/12.
+ * SwipeRefreshLayout 包含 ListView 布局<br>
+ * 如须自定义加载框，可继承此类重写 {@link #createFooter() createFooter}方法
+ * <p>Created by hupei on 2016/5/12.
  */
-public class SwipeRefreshListView extends BaseSwipeRefresh<ListView> {
-    protected ListAdapter mAdapter;
+public class SwipeRefreshListView<T extends ListView> extends SwipeRefreshAbsListView<T> {
 
     public SwipeRefreshListView(Context context) {
         super(context);
@@ -24,15 +17,6 @@ public class SwipeRefreshListView extends BaseSwipeRefresh<ListView> {
 
     public SwipeRefreshListView(Context context, AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    /**
-     * 为 ListView 设置适配器
-     *
-     * @param adapter
-     */
-    public final void setAdapter(ListAdapter adapter) {
-        this.mAdapter = adapter;
     }
 
     @Override
@@ -56,26 +40,7 @@ public class SwipeRefreshListView extends BaseSwipeRefresh<ListView> {
     }
 
     @Override
-    protected View onCreateFooterView() {
-        LinearLayout footerView = new LinearLayout(getContext());
-        footerView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 100));
-        footerView.setOrientation(LinearLayout.HORIZONTAL);
-        footerView.setGravity(Gravity.CENTER);
-
-        ProgressBar progressBar = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmallInverse);
-        footerView.addView(progressBar, new AbsListView.LayoutParams(
-                AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
-
-        TextView textView = new TextView(getContext());
-        textView.setText("加载数据中...");
-        textView.setTextAppearance(getContext(), android.R.attr.textAppearanceMedium);
-        footerView.addView(textView, new LayoutParams(
-                AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
-        return footerView;
-    }
-
-    @Override
-    protected final void onAddFooterView() {
+    protected void addFooter() {
         if (mAdapter == null)
             throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
         //如有设置上拉加载监听才添加 FooterView

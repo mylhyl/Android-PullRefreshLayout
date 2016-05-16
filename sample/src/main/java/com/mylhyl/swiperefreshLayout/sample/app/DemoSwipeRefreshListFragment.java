@@ -1,4 +1,4 @@
-package com.mylhyl.swiperefreshLayout.sample.fragment;
+package com.mylhyl.swiperefreshLayout.sample.app;
 
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +27,7 @@ public class DemoSwipeRefreshListFragment extends SwipeRefreshListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         setEnabledLoad(true);
         for (int i = 0; i < footerIndex; i++) {
             objects.add("数据 = " + i);

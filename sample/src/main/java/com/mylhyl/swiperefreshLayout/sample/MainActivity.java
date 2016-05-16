@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
-import com.mylhyl.swiperefreshLayout.sample.fragment.DemoSwipeRefreshListFragment;
+import com.mylhyl.swiperefreshLayout.sample.app.DemoSwipeRefreshExpandableListFragment;
+import com.mylhyl.swiperefreshLayout.sample.app.DemoSwipeRefreshListFragment;
+import com.mylhyl.swiperefreshLayout.sample.app.ListViewXmlFragment;
 
 public class MainActivity extends AppCompatActivity implements TypesFragment.OnFragmentInteractionListener {
 
@@ -27,9 +29,13 @@ public class MainActivity extends AppCompatActivity implements TypesFragment.OnF
         switch (typeId) {
             case 0:
                 fragment = ListViewXmlFragment.newInstance();
+                //startActivity(new Intent(this, ListViewXmlActivity.class));
                 break;
             case 1:
                 fragment = DemoSwipeRefreshListFragment.newInstance();
+                break;
+            case 2:
+                fragment = DemoSwipeRefreshExpandableListFragment.newInstance();
                 break;
         }
         if (fragment != null)

@@ -1,4 +1,4 @@
-package com.mylhyl.swiperefreshLayout.sample;
+package com.mylhyl.swiperefreshLayout.sample.app;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.mylhyl.rslayout.OnListLoadListener;
 import com.mylhyl.rslayout.SwipeRefreshListView;
+import com.mylhyl.swiperefreshLayout.sample.R;
 
 import java.util.ArrayList;
 import java.util.List;
