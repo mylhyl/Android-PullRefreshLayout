@@ -25,15 +25,25 @@ import android.widget.ListView;
  */
 public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayout {
     /**
-     * 创建上拉加载提示 view
+     * 创建上拉加载 view 子类重写
+     *
      * @return
      */
     protected abstract View onCreateFooterView();
 
+    /**
+     * 添加上拉加载 View 子类重写
+     */
     protected abstract void onAddFooterView();
 
+    /**
+     * 显示上拉加载 子类重写
+     */
     protected abstract void showFooter();
 
+    /**
+     * 隐藏上拉加载 子类重写
+     */
     protected abstract void hideFooter();
 
     private static final int[] COLOR_RES_IDS = new int[]{android.R.color.holo_blue_light, android.R.color.holo_red_light,
@@ -86,7 +96,7 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
     }
 
     /**
-     * 进入就开始显示刷新
+     * 显示下拉刷新
      *
      * @author hupei
      * @date 2015年10月30日 下午2:28:47
@@ -130,13 +140,6 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
             throw new RuntimeException("call setOnListLoadListener after, abstract method onCreateFooterView cannot return null");
     }
 
-    /**
-     * 启停刷新
-     *
-     * @param refreshing
-     * @author hupei
-     * @date 2015年7月31日 上午9:06:27
-     */
     @Override
     public final void setRefreshing(boolean refreshing) {
         super.setRefreshing(refreshing);
@@ -146,7 +149,7 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
     }
 
     /**
-     * 如果到了最底部,而且是上拉操作.那么执行onLoad方法
+     * 执行onLoad方法{@linkplain SwipeRefreshOnScrollListener#onScrollStateChanged(AbsListView, int) 使用}
      */
     private void loadData() {
         if (mOnListLoadListener != null) {

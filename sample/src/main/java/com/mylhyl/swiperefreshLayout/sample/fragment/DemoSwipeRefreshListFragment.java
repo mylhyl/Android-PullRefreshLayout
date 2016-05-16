@@ -1,4 +1,4 @@
-package com.mylhyl.swiperefreshLayout.sample;
+package com.mylhyl.swiperefreshLayout.sample.fragment;
 
 import android.os.Bundle;
 import android.view.View;

@@ -38,7 +38,7 @@ import com.mylhyl.rslayout.SwipeRefreshListView;
  * <p/>
  * 注：SwipeRefreshLayout 只能有一个 childView，childView自身必须是可滚动的view<br>
  * 或 childView 必须包含可滚动的view，如ScrollView或者ListView<br>
- * 重写 onCreateView 必须 super
+ * 子类继承重写 onCreateView 必须 super
  *
  * @author hupei
  * @date 2015年7月31日 上午9:05:42
@@ -46,16 +46,16 @@ import com.mylhyl.rslayout.SwipeRefreshListView;
 public abstract class BaseSwipeRefreshFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnListLoadListener {
 
     /**
-     * 创建下拉刷新控件 CygSwipeRefreshLayout
+     * 创建下拉刷新控件 CygSwipeRefreshLayout 子类重写
      *
      * @return
      * @author hupei
      * @date 2015年11月3日 下午4:27:52
      */
-    public abstract SwipeRefreshListView createSwipeRefreshLayout();
+    public abstract BaseSwipeRefresh createSwipeRefreshLayout();
 
     /**
-     * 创建 SwipeRefreshLayout 中包含的子控件，必须是可滑动的
+     * 创建 SwipeRefreshLayout 中包含的子控件，必须是可滑动的。子类重写
      *
      * @return
      * @author hupei
@@ -98,7 +98,7 @@ public abstract class BaseSwipeRefreshFragment extends Fragment implements Swipe
      * @author hupei
      * @date 2015年11月3日 下午4:28:43
      */
-    private View createEmptyView() {
+    protected View createEmptyView() {
         TextView emptyView = new TextView(getActivity());
         emptyView.setId(android.R.id.empty);
         emptyView.setTextAppearance(getActivity(), android.R.attr.textAppearanceSmall);

@@ -26,6 +26,11 @@ public class SwipeRefreshListView extends BaseSwipeRefresh<ListView> {
         super(context, attrs);
     }
 
+    /**
+     * 为 ListView 设置适配器
+     *
+     * @param adapter
+     */
     public final void setAdapter(ListAdapter adapter) {
         this.mAdapter = adapter;
     }
