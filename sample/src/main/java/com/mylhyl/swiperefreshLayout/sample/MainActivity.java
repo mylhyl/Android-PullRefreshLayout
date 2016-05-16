@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements TypesFragment.OnF
         switch (typeId) {
             case 0:
                 fragment = ListViewXmlFragment.newInstance();
-                //startActivity(new Intent(this, ListViewXmlActivity.class));
                 break;
             case 1:
                 fragment = DemoSwipeRefreshListFragment.newInstance();

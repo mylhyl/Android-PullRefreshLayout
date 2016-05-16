@@ -27,11 +27,9 @@ public class DemoSwipeRefreshListFragment extends SwipeRefreshListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        getSwipeRefreshLayout().showRefreshHeader();
         setEnabledLoad(true);
-        for (int i = 0; i < footerIndex; i++) {
-            objects.add("数据 = " + i);
-        }
+
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, objects);
         setListAdapter(adapter);
     }
@@ -47,7 +45,13 @@ public class DemoSwipeRefreshListFragment extends SwipeRefreshListFragment {
         getSwipeRefreshLayout().postDelayed(new Runnable() {
             @Override
             public void run() {
-                objects.add(0, "下拉 = " + (--index));
+                if (adapter.isEmpty()) {
+                    for (int i = 0; i < footerIndex; i++) {
+                        objects.add("数据 = " + i);
+                    }
+                } else {
+                    objects.add(0, "下拉 = " + (--index));
+                }
                 adapter.notifyDataSetChanged();
                 setRefreshing(false);
             }

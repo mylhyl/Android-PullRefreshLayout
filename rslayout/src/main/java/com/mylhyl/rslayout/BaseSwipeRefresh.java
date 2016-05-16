@@ -49,6 +49,7 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
 
     protected T mContentView;
     protected View mFooterView;
+    private Runnable runnableAddFooter;
 
     private int[] mColorResIds = COLOR_RES_IDS;
 
@@ -87,10 +88,23 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
                 // 利用 ListView 的 OnScrollListener 滑动事件，解决 RefreshLayout 与 ListView 滑动冲突
                 absListView.setOnScrollListener(new SwipeRefreshOnScrollListener(this));
                 mContentView = (T) absListView;
-                addFooter();
+                post(runnableAddFooter = new Runnable() {
+                    @Override
+                    public void run() {
+                        addFooter();
+                    }
+                });
+
                 break;
             }
         }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        if (runnableAddFooter != null)
+            removeCallbacks(runnableAddFooter);
+        super.onDetachedFromWindow();
     }
 
     /**
