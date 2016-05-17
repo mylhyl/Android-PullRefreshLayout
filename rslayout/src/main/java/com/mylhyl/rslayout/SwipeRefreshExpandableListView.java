@@ -36,7 +36,7 @@ public class SwipeRefreshExpandableListView extends SwipeRefreshListView<Expanda
             throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
         //如有设置上拉加载监听才添加 FooterView
         if (mOnListLoadListener != null && mContentView.getFooterViewsCount() >= 0) {
-            mContentView.addFooterView(mFooterView);
+            mContentView.addFooterView(mFooterView, null, false);
         }
         mContentView.setAdapter(mAdapter);
         //避免数据不够一屏时，加载更新在显示中，所以得移除
