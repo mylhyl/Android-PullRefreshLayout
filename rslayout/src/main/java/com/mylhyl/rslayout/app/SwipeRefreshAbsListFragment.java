@@ -41,22 +41,15 @@ abstract class SwipeRefreshAbsListFragment<T extends AbsListView> extends BaseSw
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        LinearLayout rootView = new LinearLayout(getActivity());
-        rootView.setOrientation(LinearLayout.VERTICAL);
-        rootView.setLayoutParams(params);
+        BaseSwipeRefresh swipeRefreshLayout = getSwipeRefreshLayout();
 
-        rootView.addView(getSwipeRefreshLayout(), params);
-
-        // 构造 SwipeRefreshLayout 中的childVie布局，包含二个view：ListView 与 TextView
         final FrameLayout frameLayout = new FrameLayout(getActivity());
-        getSwipeRefreshLayout().addView(frameLayout, params);
+        swipeRefreshLayout.addView(frameLayout, params);
 
-        // 添加可滑动的 View，可由子提供，此处默认为 ListView
         frameLayout.addView(getRefreshChildView(), params);
+        frameLayout.addView(swipeRefreshLayout.getEmptyView(), params);
 
-        frameLayout.addView(getEmptyView(), params);
-
-        return rootView;
+        return swipeRefreshLayout;
     }
 
     /**

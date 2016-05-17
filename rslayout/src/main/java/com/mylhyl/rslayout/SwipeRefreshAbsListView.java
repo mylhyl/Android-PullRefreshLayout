@@ -1,6 +1,7 @@
 package com.mylhyl.rslayout;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -18,7 +19,8 @@ import android.widget.TextView;
  * <p> Created by hupei on 2016/5/12.
  */
 abstract class SwipeRefreshAbsListView<T extends AbsListView> extends BaseSwipeRefresh<T> {
-    protected ListAdapter mAdapter;
+    private ListAdapter mAdapter;
+    private EmptyDataSetObserver mDataSetObserver;
 
     public SwipeRefreshAbsListView(Context context) {
         super(context);
@@ -35,6 +37,14 @@ abstract class SwipeRefreshAbsListView<T extends AbsListView> extends BaseSwipeR
      */
     public final void setAdapter(ListAdapter adapter) {
         this.mAdapter = adapter;
+        if (mAdapter != null && mDataSetObserver == null) {
+            mDataSetObserver = new EmptyDataSetObserver();
+            mAdapter.registerDataSetObserver(mDataSetObserver);
+        }
+    }
+
+    public ListAdapter getListAdapter() {
+        return mAdapter;
     }
 
     @Override
@@ -56,5 +66,21 @@ abstract class SwipeRefreshAbsListView<T extends AbsListView> extends BaseSwipeR
         footerView.addView(textView, new LayoutParams(
                 AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
         return footerView;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mAdapter != null && mDataSetObserver != null) {
+            mAdapter.unregisterDataSetObserver(mDataSetObserver);
+            mDataSetObserver = null;
+        }
+    }
+
+    private class EmptyDataSetObserver extends DataSetObserver {
+        @Override
+        public void onChanged() {
+            updateEmptyViewShown(mAdapter == null || mAdapter.isEmpty());
+        }
     }
 }

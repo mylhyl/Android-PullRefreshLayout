@@ -1,12 +1,16 @@
 package com.mylhyl.swiperefreshLayout.sample.app;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.mylhyl.rslayout.app.SwipeRefreshListFragment;
+import com.mylhyl.swiperefreshLayout.sample.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +31,13 @@ public class DemoSwipeRefreshListFragment extends SwipeRefreshListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
         getSwipeRefreshLayout().showRefreshHeader();
         setEnabledLoad(true);
 
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, objects);
         setListAdapter(adapter);
+        setEmptyText("无数据");
     }
 
     @Override
@@ -72,5 +78,17 @@ public class DemoSwipeRefreshListFragment extends SwipeRefreshListFragment {
                 setLoading(false);
             }
         }, 2000);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        objects.clear();
+        adapter.notifyDataSetChanged();
+        return super.onOptionsItemSelected(item);
     }
 }

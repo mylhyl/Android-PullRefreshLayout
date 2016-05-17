@@ -1,13 +1,19 @@
 package com.mylhyl.rslayout;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.TextView;
 
 /**
  * android v4 兼容包 中 SwipeRefreshLayout 刷新控件，支持上拉加载
@@ -47,7 +53,8 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
     private static final int[] COLOR_RES_IDS = new int[]{android.R.color.holo_blue_light, android.R.color.holo_red_light,
             android.R.color.holo_orange_light, android.R.color.holo_green_light};
 
-    protected T mContentView;
+    private T mContentView;
+    private View mEmptyView;
     protected View mFooterView;
     private Runnable runnableAddFooter;
 
@@ -82,6 +89,9 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
             View childView = vg.getChildAt(i);
             if (childView instanceof FrameLayout) {
                 getListView((ViewGroup) childView);
+            } else if (childView.getParent() instanceof FrameLayout
+                    && (childView instanceof TextView || childView instanceof ImageView)) {
+                mEmptyView = childView;
             } else if (childView instanceof AbsListView) {
                 AbsListView absListView = (AbsListView) childView;
                 // 设置滚动监听器给ListView, 使得滚动的情况下也可以自动加载
@@ -94,10 +104,14 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
                         addFooter();
                     }
                 });
-
-                break;
+                continue;
             }
         }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
     }
 
     @Override
@@ -129,6 +143,34 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
         setRefreshing(true);
     }
 
+    public final void setEmptyText(int resId) {
+        setEmptyText(getContext().getString(resId));
+    }
+
+    public final void setEmptyText(CharSequence text) {
+        if (mEmptyView != null && mEmptyView instanceof TextView) {
+            TextView textView = (TextView) mEmptyView;
+            textView.setText(text);
+        }
+    }
+
+    public final void setEmptyView(View emptyView) {
+        this.mEmptyView = emptyView;
+    }
+
+    public final View getEmptyView() {
+        return mEmptyView;
+    }
+
+    protected final void updateEmptyViewShown(boolean shown) {
+        /*
+         * ListView不能设置隐藏，否则下拉刷新有问题，因为 SwipeRefreshLayout 必须有滚动的view。
+		 * mListView.setVisibility(!shown ? View.VISIBLE : View.GONE);
+		 */
+        if (mEmptyView != null)
+            mEmptyView.setVisibility(shown ? View.VISIBLE : View.GONE);
+    }
+
     @Override
     public final void setOnRefreshListener(OnRefreshListener listener) {
         mOnRefreshListener = listener;
@@ -139,8 +181,6 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
      * 注册上拉加载事件
      *
      * @param onListLoadListener
-     * @author hupei
-     * @date 2015年11月3日 上午10:36:59
      */
     public final void setOnListLoadListener(OnListLoadListener onListLoadListener) {
         this.mOnListLoadListener = onListLoadListener;
@@ -174,8 +214,6 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
      * 设置是否处于上拉加载状态
      *
      * @param loading 为true加载状态，false结束加载
-     * @author hupei
-     * @date 2015年7月31日 上午9:09:27
      */
     public final void setLoading(boolean loading) {
         this.mLoading = loading;
@@ -187,8 +225,6 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
      * 允许上拉加载
      *
      * @param enabled
-     * @author hupei
-     * @date 2015年7月31日 下午4:03:28
      */
     public final void setEnabledLoad(boolean enabled) {
         mEnabledLoad = enabled;
@@ -198,8 +234,6 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
      * 是否在上拉加载中
      *
      * @return
-     * @author hupei
-     * @date 2015年11月3日 上午10:35:44
      */
     public final boolean isLoading() {
         return mLoading;
@@ -209,19 +243,18 @@ public abstract class BaseSwipeRefresh<T extends View> extends SwipeRefreshLayou
      * 是否允许上拉加载
      *
      * @return
-     * @author hupei
-     * @date 2015年11月3日 上午10:35:28
      */
     public final boolean isEnabledLoad() {
         return mEnabledLoad;
     }
 
+    public T getContentView() {
+        return mContentView;
+    }
+
     /**
      * SwipeRefreshLayout结合ListView使用的时候有时候存在下拉冲突
      * 结果当第一个item长度超过一屏，明明还没有到达列表顶部，Scroll事件就被拦截，列表无法滚动，同时启动了刷新。
-     *
-     * @author hupei
-     * @date 2015年7月30日 下午2:35:12
      */
     protected final class SwipeRefreshOnScrollListener implements OnScrollListener {
         private BaseSwipeRefresh mSwipeView;

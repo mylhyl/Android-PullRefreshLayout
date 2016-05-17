@@ -21,12 +21,13 @@ public class SwipeRefreshListView<T extends ListView> extends SwipeRefreshAbsLis
 
     @Override
     protected final void showFooter() {
-        if (mFooterView != null && mContentView != null && mContentView.getFooterViewsCount() >= 0) {
-            mContentView.addFooterView(mFooterView, null, false);
-            mContentView.post(new Runnable() {
+        final ListView contentView = getContentView();
+        if (mFooterView != null && contentView != null && contentView.getFooterViewsCount() >= 0) {
+            contentView.addFooterView(mFooterView, null, false);
+            contentView.post(new Runnable() {
                 @Override
                 public void run() {
-                    mContentView.smoothScrollByOffset(mContentView.getBottom());
+                    contentView.smoothScrollByOffset(contentView.getBottom());
                 }
             });
         }
@@ -34,22 +35,24 @@ public class SwipeRefreshListView<T extends ListView> extends SwipeRefreshAbsLis
 
     @Override
     protected final void hideFooter() {
-        if (mFooterView != null && mContentView != null && mContentView.getFooterViewsCount() > 0) {
-            mContentView.removeFooterView(mFooterView);
+        ListView contentView = getContentView();
+        if (mFooterView != null && contentView != null && contentView.getFooterViewsCount() > 0) {
+            contentView.removeFooterView(mFooterView);
         }
     }
 
     @Override
     protected void addFooter() {
-        if (mAdapter == null)
+        ListView contentView = getContentView();
+        if (getListAdapter() == null)
             throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
         //如有设置上拉加载监听才添加 FooterView
-        if (mOnListLoadListener != null && mContentView.getFooterViewsCount() >= 0) {
-            mContentView.addFooterView(mFooterView, null, false);
+        if (mOnListLoadListener != null && contentView.getFooterViewsCount() >= 0) {
+            contentView.addFooterView(mFooterView, null, false);
         }
-        mContentView.setAdapter(mAdapter);
+        contentView.setAdapter(getListAdapter());
         //避免数据不够一屏时，加载更新在显示中，所以得移除
-        if (mOnListLoadListener != null && mContentView.getFooterViewsCount() > 0)
-            mContentView.removeFooterView(mFooterView);
+        if (mOnListLoadListener != null && contentView.getFooterViewsCount() > 0)
+            contentView.removeFooterView(mFooterView);
     }
 }

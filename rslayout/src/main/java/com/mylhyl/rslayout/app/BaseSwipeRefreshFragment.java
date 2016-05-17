@@ -51,8 +51,6 @@ abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
      * 创建下拉刷新控件 CygSwipeRefreshLayout 子类重写
      *
      * @return
-     * @author hupei
-     * @date 2015年11月3日 下午4:27:52
      */
     public abstract BaseSwipeRefresh createSwipeRefreshLayout();
 
@@ -60,20 +58,17 @@ abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
      * 创建 SwipeRefreshLayout 中包含的子控件，必须是可滑动的。子类重写
      *
      * @return
-     * @author hupei
-     * @date 2015年10月30日 下午1:48:43
      */
     public abstract T createRefreshChildView();
 
     private T mRefreshChildView;// SwipeRefreshLayout 的子 view
     private BaseSwipeRefresh mSwipeRefresh;
-    private View mEmptyView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mSwipeRefresh = createSwipeRefreshLayout();
         mRefreshChildView = createRefreshChildView();
-        mEmptyView = createEmptyView();
+        mSwipeRefresh.setEmptyView(createEmptyView());
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -88,10 +83,8 @@ abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
      * 创建空数据显示view
      *
      * @return
-     * @author hupei
-     * @date 2015年11月3日 下午4:28:43
      */
-    protected View createEmptyView() {
+    private View createEmptyView() {
         TextView emptyView = new TextView(getActivity());
         emptyView.setId(android.R.id.empty);
         emptyView.setTextAppearance(getActivity(), android.R.attr.textAppearanceSmall);
@@ -104,8 +97,6 @@ abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
      * 设置允许上拉加载，并注册监听器，重写{@link #onListLoad()}
      *
      * @param enabled
-     * @author hupei
-     * @date 2015年11月3日 上午9:43:34
      * @see SwipeRefreshListView#setEnabledLoad(boolean)
      */
     public final void setEnabledLoad(boolean enabled) {
@@ -128,52 +119,12 @@ abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
         getSwipeRefreshLayout().setLoading(loading);
     }
 
-    /**
-     * @param resId
-     * @author hupei
-     * @date 2015年11月3日 上午11:16:28
-     * @see #setEmptyText(CharSequence)
-     */
     public final void setEmptyText(int resId) {
         setEmptyText(getString(resId));
     }
 
-    /**
-     * 设置ListView 空数据时 TextView 显示信息
-     *
-     * @param text
-     * @author hupei
-     * @date 2015年7月31日 上午9:06:57
-     */
     public final void setEmptyText(CharSequence text) {
-        if (mEmptyView instanceof TextView) {
-            TextView textView = (TextView) mEmptyView;
-            textView.setText(text);
-        }
-        setEmptyViewShown(true);
-    }
-
-    /**
-     * 设置是否显示空数据提示语
-     *
-     * @param shown
-     * @author hupei
-     * @date 2015年7月31日 上午9:07:25
-     */
-    public final void setEmptyViewShown(boolean shown) {
-        if (mRefreshChildView instanceof ExpandableListView) {
-            ExpandableListAdapter adapter = ((ExpandableListView) mRefreshChildView).getExpandableListAdapter();
-            if (adapter == null || adapter.getGroupCount() == 0) return;
-        } else if (mRefreshChildView instanceof AbsListView) {
-            AbsListView absListView = (AbsListView) mRefreshChildView;
-            ListAdapter adapter = absListView.getAdapter();
-            if (adapter == null || adapter.getCount() == 0) return;
-        }
-        /*
-         * ListView不能设置隐藏，否则下拉刷新有问题，因为 SwipeRefreshLayout 必须有滚动的view。
-		 * mListView.setVisibility(!shown ? View.VISIBLE : View.GONE);
-		 */
-        mEmptyView.setVisibility(shown ? View.VISIBLE : View.GONE);
+        getSwipeRefreshLayout().setEmptyText(text);
     }
 
     public final BaseSwipeRefresh getSwipeRefreshLayout() {
@@ -184,10 +135,6 @@ abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
         return mRefreshChildView;
     }
 
-    protected final View getEmptyView() {
-        return mEmptyView;
-    }
-
     /**
      * Item 点击时此方法调用，子类可重写
      *
@@ -195,8 +142,6 @@ abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
      * @param view
      * @param position
      * @param id
-     * @author hupei
-     * @date 2015年7月31日 上午9:08:08
      */
     public void onListItemClick(AdapterView<?> parent, View view, int position, long id) {
     }

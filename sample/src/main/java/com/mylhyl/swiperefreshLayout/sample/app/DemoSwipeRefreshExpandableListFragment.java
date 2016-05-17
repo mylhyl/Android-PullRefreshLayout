@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 
 import com.mylhyl.rslayout.BaseSwipeRefresh;
 import com.mylhyl.rslayout.app.SwipeRefreshExpandableListFragment;
+import com.mylhyl.swiperefreshLayout.sample.R;
 import com.mylhyl.swiperefreshLayout.sample.widget.MySwipeRefreshExpandableListView;
 
 import java.util.ArrayList;
@@ -35,7 +39,7 @@ public class DemoSwipeRefreshExpandableListFragment extends SwipeRefreshExpandab
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        setHasOptionsMenu(true);
         setEnabledLoad(true);
         for (int i = 0; i < footerIndex; i++) {
             groups.add("group = " + i);
@@ -47,6 +51,7 @@ public class DemoSwipeRefreshExpandableListFragment extends SwipeRefreshExpandab
         }
         adapter = new MyExpandableListAdapter(this.getContext());
         setListAdapter(adapter);
+        setEmptyText("什么也没有！");
     }
 
     @Override
@@ -103,6 +108,19 @@ public class DemoSwipeRefreshExpandableListFragment extends SwipeRefreshExpandab
                 setLoading(false);
             }
         }, 2000);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        groups.clear();
+        childs.clear();
+        adapter.notifyDataSetChanged();
+        return super.onOptionsItemSelected(item);
     }
 
     class MyExpandableListAdapter extends BaseExpandableListAdapter {

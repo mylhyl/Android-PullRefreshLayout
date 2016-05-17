@@ -6,9 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".app.ListViewXmlFragment">
 
-    <com.mylhyl.rslayout.widget.HeaderGridView
-        android:id="@+id/gridView"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:numColumns="2" />
+        android:layout_height="match_parent">
+
+        <com.mylhyl.rslayout.widget.HeaderGridView
+            android:id="@+id/gridView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="2" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="亲！无数据哦！"
+            android:visibility="gone" />
+    </FrameLayout>
 </com.mylhyl.rslayout.SwipeRefreshGridView>

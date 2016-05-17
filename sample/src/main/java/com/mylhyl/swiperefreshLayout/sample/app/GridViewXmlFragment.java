@@ -5,6 +5,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -50,7 +53,7 @@ public class GridViewXmlFragment extends Fragment implements SwipeRefreshLayout.
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        setHasOptionsMenu(true);
         swipeRefreshGridView.setOnListLoadListener(this);
         swipeRefreshGridView.setOnRefreshListener(this);
 
@@ -59,6 +62,8 @@ public class GridViewXmlFragment extends Fragment implements SwipeRefreshLayout.
         }
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, objects);
         swipeRefreshGridView.setAdapter(adapter);
+
+        swipeRefreshGridView.setEmptyText("空空的哦！");
     }
 
 
@@ -88,5 +93,17 @@ public class GridViewXmlFragment extends Fragment implements SwipeRefreshLayout.
                 swipeRefreshGridView.setLoading(false);
             }
         }, 2000);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        objects.clear();
+        adapter.notifyDataSetChanged();
+        return super.onOptionsItemSelected(item);
     }
 }

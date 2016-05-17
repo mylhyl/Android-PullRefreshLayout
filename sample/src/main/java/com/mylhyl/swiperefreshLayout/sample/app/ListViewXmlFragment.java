@@ -5,9 +5,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -44,16 +48,12 @@ public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         swipeRefreshListView = (SwipeRefreshListView) view.findViewById(R.id.swipeRefresh);
-        ListView listView = (ListView) view.findViewById(R.id.listView);
-        TextView textView = new TextView(getContext());
-        textView.setText("我是新用户!");
-        listView.addFooterView(textView);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        setHasOptionsMenu(true);
         swipeRefreshListView.setOnListLoadListener(this);
         swipeRefreshListView.setOnRefreshListener(this);
 
@@ -62,6 +62,7 @@ public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.
         }
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, objects);
         swipeRefreshListView.setAdapter(adapter);
+        swipeRefreshListView.setEmptyText("数据呢？");
     }
 
 
@@ -91,5 +92,17 @@ public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.
                 swipeRefreshListView.setLoading(false);
             }
         }, 2000);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        objects.clear();
+        adapter.notifyDataSetChanged();
+        return super.onOptionsItemSelected(item);
     }
 }
