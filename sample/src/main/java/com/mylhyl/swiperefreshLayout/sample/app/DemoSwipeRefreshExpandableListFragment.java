@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mylhyl.rslayout.BaseSwipeRefresh;
-import com.mylhyl.rslayout.extras.SwipeRefreshExpandableListFragment;
+import com.mylhyl.rslayout.app.SwipeRefreshExpandableListFragment;
 import com.mylhyl.swiperefreshLayout.sample.widget.MySwipeRefreshExpandableListView;
 
 import java.util.ArrayList;

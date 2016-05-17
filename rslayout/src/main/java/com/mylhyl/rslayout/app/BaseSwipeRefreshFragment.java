@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.mylhyl.rslayout.extras;
+package com.mylhyl.rslayout.app;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

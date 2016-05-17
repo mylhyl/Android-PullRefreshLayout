@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.mylhyl.swiperefreshLayout.sample.app.DemoSwipeRefreshExpandableListFragment;
 import com.mylhyl.swiperefreshLayout.sample.app.DemoSwipeRefreshListFragment;
+import com.mylhyl.swiperefreshLayout.sample.app.GridViewXmlFragment;
 import com.mylhyl.swiperefreshLayout.sample.app.ListViewXmlFragment;
 
 public class MainActivity extends AppCompatActivity implements TypesFragment.OnFragmentInteractionListener {
@@ -35,6 +36,9 @@ public class MainActivity extends AppCompatActivity implements TypesFragment.OnF
                 break;
             case 2:
                 fragment = DemoSwipeRefreshExpandableListFragment.newInstance();
+                break;
+            case 3:
+                fragment = GridViewXmlFragment.newInstance();
                 break;
         }
         if (fragment != null)

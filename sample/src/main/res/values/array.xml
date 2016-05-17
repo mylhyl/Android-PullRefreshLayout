@@ -4,5 +4,6 @@
         <item>ListView layout创建</item>
         <item>继承 SwipeRefreshListFragment</item>
         <item>继承 SwipeRefreshExpandableListFragment</item>
+        <item>GridView layout创建</item>
     </string-array>
 </resources>

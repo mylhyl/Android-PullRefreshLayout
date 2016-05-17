@@ -6,7 +6,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.mylhyl.rslayout.extras.SwipeRefreshListFragment;
+import com.mylhyl.rslayout.app.SwipeRefreshListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
