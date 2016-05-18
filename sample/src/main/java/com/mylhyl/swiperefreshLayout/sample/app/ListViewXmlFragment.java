@@ -10,10 +10,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mylhyl.rslayout.OnListLoadListener;
 import com.mylhyl.rslayout.SwipeRefreshListView;
@@ -23,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnListLoadListener {
+public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
+        OnListLoadListener, AdapterView.OnItemClickListener {
     private SwipeRefreshListView swipeRefreshListView;
     private ArrayAdapter<String> adapter;
     private List<String> objects = new ArrayList<>();
@@ -54,6 +54,7 @@ public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
+        swipeRefreshListView.setOnItemClickListener(this);
         swipeRefreshListView.setOnListLoadListener(this);
         swipeRefreshListView.setOnRefreshListener(this);
 
@@ -104,5 +105,10 @@ public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.
         objects.clear();
         adapter.notifyDataSetChanged();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
     }
 }

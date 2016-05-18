@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ProgressBar;
@@ -18,9 +19,7 @@ import android.widget.TextView;
  * {@linkplain BaseSwipeRefresh#createFooter() createFooter}方法
  * <p> Created by hupei on 2016/5/12.
  */
-abstract class SwipeRefreshAbsListView<T extends AbsListView> extends BaseSwipeRefresh<T> {
-    private ListAdapter mAdapter;
-    private EmptyDataSetObserver mDataSetObserver;
+public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends BaseSwipeRefresh<T> {
 
     public SwipeRefreshAbsListView(Context context) {
         super(context);
@@ -36,15 +35,11 @@ abstract class SwipeRefreshAbsListView<T extends AbsListView> extends BaseSwipeR
      * @param adapter
      */
     public final void setAdapter(ListAdapter adapter) {
-        this.mAdapter = adapter;
-        if (mAdapter != null && mDataSetObserver == null) {
-            mDataSetObserver = new EmptyDataSetObserver();
-            mAdapter.registerDataSetObserver(mDataSetObserver);
-        }
-    }
-
-    public ListAdapter getListAdapter() {
-        return mAdapter;
+        if (adapter == null)
+            throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
+        getScrollView().setOnScrollListener(new SwipeRefreshOnScrollListener());
+        getScrollView().setAdapter(adapter);
+        super.setEmptyDataAdapter(adapter);
     }
 
     @Override
@@ -68,19 +63,7 @@ abstract class SwipeRefreshAbsListView<T extends AbsListView> extends BaseSwipeR
         return footerView;
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (mAdapter != null && mDataSetObserver != null) {
-            mAdapter.unregisterDataSetObserver(mDataSetObserver);
-            mDataSetObserver = null;
-        }
-    }
-
-    private class EmptyDataSetObserver extends DataSetObserver {
-        @Override
-        public void onChanged() {
-            updateEmptyViewShown(mAdapter == null || mAdapter.isEmpty());
-        }
+    public final void setOnItemClickListener(AdapterView.OnItemClickListener listener) {
+        getScrollView().setOnItemClickListener(listener);
     }
 }

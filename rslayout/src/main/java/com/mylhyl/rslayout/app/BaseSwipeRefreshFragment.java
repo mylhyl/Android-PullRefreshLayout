@@ -52,23 +52,13 @@ abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
      *
      * @return
      */
-    public abstract BaseSwipeRefresh createSwipeRefreshLayout();
+    public abstract BaseSwipeRefresh<T> createSwipeRefreshLayout();
 
-    /**
-     * 创建 SwipeRefreshLayout 中包含的子控件，必须是可滑动的。子类重写
-     *
-     * @return
-     */
-    public abstract T createRefreshChildView();
-
-    private T mRefreshChildView;// SwipeRefreshLayout 的子 view
     private BaseSwipeRefresh mSwipeRefresh;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mSwipeRefresh = createSwipeRefreshLayout();
-        mRefreshChildView = createRefreshChildView();
-        mSwipeRefresh.setEmptyView(createEmptyView());
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -77,20 +67,6 @@ abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
         super.onViewCreated(view, savedInstanceState);
         // 注册下拉刷新
         mSwipeRefresh.setOnRefreshListener(this);
-    }
-
-    /**
-     * 创建空数据显示view
-     *
-     * @return
-     */
-    private View createEmptyView() {
-        TextView emptyView = new TextView(getActivity());
-        emptyView.setId(android.R.id.empty);
-        emptyView.setTextAppearance(getActivity(), android.R.attr.textAppearanceSmall);
-        emptyView.setGravity(Gravity.CENTER);
-        emptyView.setVisibility(View.GONE);
-        return emptyView;
     }
 
     /**
@@ -127,12 +103,12 @@ abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
         getSwipeRefreshLayout().setEmptyText(text);
     }
 
-    public final BaseSwipeRefresh getSwipeRefreshLayout() {
-        return mSwipeRefresh;
+    public final void setEmptyView(View emptyView) {
+        getSwipeRefreshLayout().setEmptyView(emptyView);
     }
 
-    protected final T getRefreshChildView() {
-        return mRefreshChildView;
+    public final BaseSwipeRefresh<T> getSwipeRefreshLayout() {
+        return mSwipeRefresh;
     }
 
     /**

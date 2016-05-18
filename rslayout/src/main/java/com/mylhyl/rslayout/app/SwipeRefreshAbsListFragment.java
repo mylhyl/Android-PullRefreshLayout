@@ -14,13 +14,13 @@ import android.widget.ListAdapter;
 
 import com.mylhyl.rslayout.BaseSwipeRefresh;
 import com.mylhyl.rslayout.OnListLoadListener;
+import com.mylhyl.rslayout.SwipeRefreshAbsListView;
 import com.mylhyl.rslayout.SwipeRefreshListView;
 
 
 /**
  * 如果开启{@linkplain BaseSwipeRefreshFragment#setEnabledLoad(boolean) 上拉加载}功能
  * 必须重写 {@linkplain OnListLoadListener#onListLoad() onListLoad()}方法<br>
- * 须自定义 ListView 数据为空时的 View ，可重写 {@linkplain BaseSwipeRefreshFragment#createEmptyView() createEmptyView()}主法实现
  *
  * @author hupei
  * @date 2015年7月31日 上午9:05:42
@@ -40,16 +40,7 @@ abstract class SwipeRefreshAbsListFragment<T extends AbsListView> extends BaseSw
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        BaseSwipeRefresh swipeRefreshLayout = getSwipeRefreshLayout();
-
-        final FrameLayout frameLayout = new FrameLayout(getActivity());
-        swipeRefreshLayout.addView(frameLayout, params);
-
-        frameLayout.addView(getRefreshChildView(), params);
-        frameLayout.addView(swipeRefreshLayout.getEmptyView(), params);
-
-        return swipeRefreshLayout;
+        return getSwipeRefreshLayout();
     }
 
     /**
@@ -60,18 +51,17 @@ abstract class SwipeRefreshAbsListFragment<T extends AbsListView> extends BaseSw
      * @date 2015年7月31日 上午9:06:14
      */
     public final void setListAdapter(ListAdapter adapter) {
-        AbsListView absListView = getRefreshChildView();
+        AbsListView absListView = getSwipeRefreshLayout().getScrollView();
         if (absListView instanceof ExpandableListView) {
             new RuntimeException("please call SwipeRefreshExpandableListFragment.setListAdapter()");
         }
-        BaseSwipeRefresh swipeRefreshLayout = getSwipeRefreshLayout();
-        if (absListView != null
-                && swipeRefreshLayout != null && swipeRefreshLayout instanceof SwipeRefreshListView) {
+        BaseSwipeRefresh<T> swipeRefreshLayout = getSwipeRefreshLayout();
+        if (swipeRefreshLayout != null && swipeRefreshLayout instanceof SwipeRefreshAbsListView) {
             absListView.setVisibility(View.VISIBLE);
             absListView.setOnItemClickListener(mOnItemClickListener);
 
-            SwipeRefreshListView swipeRefreshListView = (SwipeRefreshListView) swipeRefreshLayout;
-            swipeRefreshListView.setAdapter(adapter);
+            SwipeRefreshAbsListView swipeRefreshAbsListView = (SwipeRefreshAbsListView) swipeRefreshLayout;
+            swipeRefreshAbsListView.setAdapter(adapter);
         }
     }
 }

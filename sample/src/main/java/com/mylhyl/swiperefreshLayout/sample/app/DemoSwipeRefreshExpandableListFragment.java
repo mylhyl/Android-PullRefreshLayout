@@ -66,8 +66,10 @@ public class DemoSwipeRefreshExpandableListFragment extends SwipeRefreshExpandab
     }
 
     @Override
-    public boolean onListChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-        Toast.makeText(getContext(), "groupPosition：" + groupPosition + " | childPosition：" + childPosition, Toast.LENGTH_SHORT).show();
+    public boolean onListChildClick(ExpandableListView parent, View v,
+                                    int groupPosition, int childPosition, long id) {
+        Toast.makeText(getContext(), "groupPosition："
+                + groupPosition + " | childPosition：" + childPosition, Toast.LENGTH_SHORT).show();
         return true;
     }
 
@@ -174,7 +176,8 @@ public class DemoSwipeRefreshExpandableListFragment extends SwipeRefreshExpandab
         }
 
         @Override
-        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        public View getChildView(int groupPosition, int childPosition,
+                                 boolean isLastChild, View convertView, ViewGroup parent) {
             View view = inflater.inflate(android.R.layout.simple_expandable_list_item_2, parent, false);
             TextView tv = (TextView) view.findViewById(android.R.id.text1);
             tv.setText(getChild(groupPosition, childPosition));
