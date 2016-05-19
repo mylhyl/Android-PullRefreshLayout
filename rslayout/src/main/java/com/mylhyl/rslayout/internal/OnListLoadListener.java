@@ -1,4 +1,4 @@
-package com.mylhyl.rslayout;
+package com.mylhyl.rslayout.internal;
 
 /**
  * Created by hupei on 2016/5/13.

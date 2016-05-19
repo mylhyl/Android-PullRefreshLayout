@@ -14,7 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.mylhyl.rslayout.OnListLoadListener;
+import com.mylhyl.rslayout.internal.OnListLoadListener;
 import com.mylhyl.rslayout.SwipeRefreshListView;
 import com.mylhyl.swiperefreshLayout.sample.R;
 
@@ -84,7 +84,7 @@ public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.
         swipeRefreshListView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                int count = footerIndex + 5;
+                int count = footerIndex + 10;
                 for (int i = footerIndex; i < count; i++) {
                     objects.add("上拉 = " + i);
                 }
@@ -92,7 +92,7 @@ public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.
                 adapter.notifyDataSetChanged();
                 swipeRefreshListView.setLoading(false);
             }
-        }, 2000);
+        }, 1000);
     }
 
     @Override

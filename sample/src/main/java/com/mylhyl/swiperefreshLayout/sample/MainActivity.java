@@ -10,6 +10,7 @@ import com.mylhyl.swiperefreshLayout.sample.app.DemoSwipeRefreshExpandableListFr
 import com.mylhyl.swiperefreshLayout.sample.app.DemoSwipeRefreshListFragment;
 import com.mylhyl.swiperefreshLayout.sample.app.GridViewXmlFragment;
 import com.mylhyl.swiperefreshLayout.sample.app.ListViewXmlFragment;
+import com.mylhyl.swiperefreshLayout.sample.app.RecyclerViewXmlFragment;
 
 public class MainActivity extends AppCompatActivity implements TypesFragment.OnFragmentInteractionListener {
 
@@ -39,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements TypesFragment.OnF
                 break;
             case 3:
                 fragment = GridViewXmlFragment.newInstance();
+                break;
+            case 4:
+                fragment = RecyclerViewXmlFragment.newInstance();
                 break;
         }
         if (fragment != null)

@@ -1,12 +1,12 @@
-package com.mylhyl.rslayout;
+package com.mylhyl.rslayout.internal;
 
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 
-import com.mylhyl.rslayout.ISwipeRefresh;
+import com.mylhyl.rslayout.internal.ISwipeRefresh;
 
-final class LoadSwipeRefresh extends SwipeRefreshLayout {
+public final class LoadSwipeRefresh extends SwipeRefreshLayout {
 
     private static final int[] COLOR_RES_IDS = new int[]{android.R.color.holo_blue_light, android.R.color.holo_red_light,
             android.R.color.holo_orange_light, android.R.color.holo_green_light};

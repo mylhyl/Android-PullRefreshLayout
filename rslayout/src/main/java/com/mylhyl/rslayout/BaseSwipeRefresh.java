@@ -2,18 +2,25 @@ package com.mylhyl.rslayout;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.os.Build;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
+
+import com.mylhyl.rslayout.internal.FooterLayoutConvert;
+import com.mylhyl.rslayout.internal.FooterLayout;
+import com.mylhyl.rslayout.internal.IFooterLayout;
+import com.mylhyl.rslayout.internal.ISwipeRefresh;
+import com.mylhyl.rslayout.internal.LoadSwipeRefresh;
+import com.mylhyl.rslayout.internal.OnListLoadListener;
 
 /**
  * android v4 兼容包 中 SwipeRefreshLayout 刷新控件，支持上拉加载
@@ -30,13 +37,6 @@ import android.widget.TextView;
 public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements ISwipeRefresh {
 
     /**
-     * 创建上拉加载 view 子类实现
-     *
-     * @return
-     */
-    protected abstract View createFooter();
-
-    /**
      * 创建可滑动 View，子类实现
      *
      * @param context
@@ -47,9 +47,8 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
 
     private boolean mLoading;// 是否处于上拉加载状态中
     private boolean mEnabledLoad;// 是否允许上拉加载
+    private FrameLayout mRefreshLayoutWrapper;
     private LoadSwipeRefresh mLoadSwipeRefresh;
-    private ListAdapter mEmptyDataSetAdapter;
-    private EmptyDataSetObserver mDataSetObserver;
     private T mScrollView;
     private View mEmptyView;
     protected View mFooterView;
@@ -73,6 +72,7 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public BaseSwipeRefresh(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init(context, attrs);
     }
 
     /**
@@ -103,13 +103,14 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     }
 
     private void addSwipeRefreshView(Context context, LoadSwipeRefresh loadSwipeRefresh, T scrollView, View emptyView) {
-        FrameLayout frameLayout = new FrameLayout(context);
-        frameLayout.addView(scrollView,
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        frameLayout.addView(emptyView,
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mRefreshLayoutWrapper = new FrameLayout(context);
+        mRefreshLayoutWrapper.addView(scrollView,
+                new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        mRefreshLayoutWrapper.addView(emptyView,
+                new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
 
-        loadSwipeRefresh.addView(frameLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        loadSwipeRefresh.addView(mRefreshLayoutWrapper, new LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT));
 
         addView(loadSwipeRefresh, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1));
     }
@@ -125,10 +126,12 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     public final void showRefreshHeader(boolean scale, int start, int end, int... colorResIds) {
         mLoadSwipeRefresh.showRefreshHeader(scale, start, end, colorResIds);
     }
+
     @Override
     public final void setEmptyText(int resId) {
         setEmptyText(getContext().getString(resId));
     }
+
     @Override
     public final void setEmptyText(CharSequence text) {
         if (mEmptyView != null && mEmptyView instanceof TextView) {
@@ -138,9 +141,36 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     }
 
     @Override
-    public final void setEmptyView(View emptyView) {
-        this.mEmptyView = emptyView;
+    public final void setEmptyView(View newEmptyView) {
+        if (null != newEmptyView) {
+            newEmptyView.setVisibility(GONE);
+            mEmptyView = newEmptyView;
+            newEmptyView.setClickable(true);
+
+            ViewParent newEmptyViewParent = newEmptyView.getParent();
+            if (null != newEmptyViewParent && newEmptyViewParent instanceof ViewGroup) {
+                ((ViewGroup) newEmptyViewParent).removeView(newEmptyView);
+            }
+            FrameLayout.LayoutParams lp = convertEmptyViewLayoutParams(newEmptyView.getLayoutParams());
+            if (null != lp) {
+                mRefreshLayoutWrapper.addView(newEmptyView, lp);
+            } else {
+                mRefreshLayoutWrapper.addView(newEmptyView);
+            }
+        }
     }
+
+    private static FrameLayout.LayoutParams convertEmptyViewLayoutParams(ViewGroup.LayoutParams lp) {
+        FrameLayout.LayoutParams newLp = null;
+        if (null != lp) {
+            newLp = new FrameLayout.LayoutParams(lp);
+            if (lp instanceof LinearLayout.LayoutParams)
+                newLp.gravity = ((LinearLayout.LayoutParams) lp).gravity;
+            else newLp.gravity = Gravity.CENTER;
+        }
+        return newLp;
+    }
+
     @Override
     public final View getEmptyView() {
         return mEmptyView;
@@ -172,13 +202,28 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     }
 
     private void addFooterView() {
-        if (mFooterView == null)
+        if (mFooterView == null) {
             mFooterView = createFooter();//创建上拉加载 View
+            if (mFooterView == null)
+                throw new RuntimeException("call setOnListLoadListener after, abstract method onCreateFooterView cannot return null");
+            boolean b = mFooterView instanceof IFooterLayout;
+            if (!b) {
+                mFooterView = new FooterLayoutConvert(getContext(), mFooterView);
+            }
+            addView(mFooterView);
+            hideFooter();
+        }
+    }
 
-        if (mFooterView == null)
-            throw new RuntimeException("call setOnListLoadListener after, abstract method onCreateFooterView cannot return null");
-        mFooterView.setVisibility(GONE);
-        addView(mFooterView);
+    /**
+     * 创建上拉加载 view 子类可重写
+     *
+     * @return
+     */
+    protected View createFooter() {
+        FooterLayout footerLayout = new FooterLayout(getContext());
+        footerLayout.setFooterText("加载数据中...");
+        return footerLayout;
     }
 
     @Override
@@ -199,8 +244,10 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     @Override
     public final void setLoading(boolean loading) {
         this.mLoading = loading;
-        if (mLoading && mFooterView != null) showFooter();
-        else hideFooter();
+        if (mFooterView != null) {
+            if (mLoading) showFooter();
+            else hideFooter();
+        }
     }
 
     /**
@@ -216,7 +263,6 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     private void hideFooter() {
         mFooterView.setVisibility(GONE);
     }
-
 
     @Override
     public final void setEnabledLoad(boolean enabled) {
@@ -238,31 +284,12 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
         return mScrollView;
     }
 
-    void setEmptyDataAdapter(ListAdapter adapter) {
-        mEmptyDataSetAdapter = adapter;
-        if (mEmptyDataSetAdapter != null && mDataSetObserver != null) {
-            mEmptyDataSetAdapter.unregisterDataSetObserver(mDataSetObserver);
-        }
-        if (mEmptyDataSetAdapter != null && mDataSetObserver == null) {
-            mDataSetObserver = new EmptyDataSetObserver();
-            mEmptyDataSetAdapter.registerDataSetObserver(mDataSetObserver);
-        }
-    }
-
     @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (mEmptyDataSetAdapter != null && mDataSetObserver != null) {
-            mEmptyDataSetAdapter.unregisterDataSetObserver(mDataSetObserver);
-            mDataSetObserver = null;
-        }
-    }
-
-    private class EmptyDataSetObserver extends DataSetObserver {
-        @Override
-        public void onChanged() {
-            updateEmptyViewShown(mEmptyDataSetAdapter == null || mEmptyDataSetAdapter.isEmpty());
-        }
+    public IFooterLayout getFooterLayout() {
+        addFooterView();
+        if (mFooterView instanceof IFooterLayout)
+            return (IFooterLayout) mFooterView;
+        return null;
     }
 
     /**
@@ -288,13 +315,6 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
              SCROLL_STATE_FLING = 2            手指做了抛的动作（手指离开屏幕前，用力滑了一下）
              SCROLL_STATE_IDLE = 0             停止滚动
              */
-            if (scrollState == SCROLL_STATE_IDLE) { // 只有在闲置状态情况下检查
-                // 如果满足，允许上拉加载、非加载状态中、最后一个显示的 item 与数据源的大小一样，则表示滑动入底部
-                if (isEnabledLoad() && !isLoading()
-                        && view.getLastVisiblePosition() == view.getCount() - 1) {
-                    loadData();// 滑动底部自动执行上拉加载
-                }
-            }
             if (null != mOnScrollListener)
                 mOnScrollListener.onScrollStateChanged(view, scrollState);
         }
@@ -311,10 +331,117 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
             // 当firstVisibleItem是第0位。如果firstView==null说明列表为空，需要刷新;或者top==0说明已经到达列表顶部
             if (firstVisibleItem == 0 && (firstView == null || firstView.getTop() == 0)) {
                 mLoadSwipeRefresh.setEnabled(true);
-            } else mLoadSwipeRefresh.setEnabled(false);
+            } else {
+                mLoadSwipeRefresh.setEnabled(false);
+                if (isEnabledLoad() && !isLoading()
+                        && view.getLastVisiblePosition() == (totalItemCount - 1)) {
+                    loadData();// 滑动底部自动执行上拉加载
+                }
+            }
 
             if (null != mOnScrollListener)
                 mOnScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+        }
+    }
+
+    final class SwipeRefreshRVOnScrollListener extends RecyclerView.OnScrollListener {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+//            int lastVisiblePosition = 0;
+//            RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+//            int totalItemCount = manager.getItemCount();
+//            if (manager instanceof LinearLayoutManager) {
+//                lastVisiblePosition = ((LinearLayoutManager) manager).findLastVisibleItemPosition();
+//            } else if (manager instanceof StaggeredGridLayoutManager) {
+//                lastVisiblePosition =((StaggeredGridLayoutManager) manager).findLastVisibleItemPositions();
+//            }
+            if (newState == RecyclerView.SCROLL_STATE_IDLE) { // 只有在闲置状态情况下检查
+                // 如果满足，允许上拉加载、非加载状态中、最后一个显示的 item 与数据源的大小一样，则表示滑动入底部
+                if (isEnabledLoad() && !isLoading()
+//                        && lastVisiblePosition == (totalItemCount - 1)) {
+                        && isLastItemVisible(recyclerView)) {
+                    loadData();// 滑动底部自动执行上拉加载
+                }
+            }
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+//            RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+//            int firstVisibleItem = 0;
+//            if (manager instanceof LinearLayoutManager) {
+//                firstVisibleItem = ((LinearLayoutManager) manager).findFirstVisibleItemPosition();
+//            }
+//            final View firstView = recyclerView.getChildAt(firstVisibleItem);
+//            if (firstVisibleItem == 0 && (firstView == null || firstView.getTop() == 0))
+            if (isFirstItemVisible(recyclerView))
+                mLoadSwipeRefresh.setEnabled(true);
+            else mLoadSwipeRefresh.setEnabled(false);
+        }
+
+        /**
+         * 判断第一个条目是否完全可见
+         *
+         * @param recyclerView
+         * @return
+         */
+        private boolean isFirstItemVisible(RecyclerView recyclerView) {
+            final RecyclerView.Adapter<?> adapter = recyclerView.getAdapter();
+            // 如果未设置Adapter或者Adapter没有数据可以下拉刷新
+            if (null == adapter || adapter.getItemCount() == 0) {
+                return true;
+            }
+            // 第一个条目完全展示,可以刷新
+            if (getFirstVisiblePosition(recyclerView) == 0) {
+                return recyclerView.getChildAt(0).getTop() >= recyclerView.getTop();
+            }
+            return false;
+        }
+
+        /**
+         * 获取第一个可见子View的位置下标
+         *
+         * @param recyclerView
+         * @return
+         */
+        private int getFirstVisiblePosition(RecyclerView recyclerView) {
+            View firstVisibleChild = recyclerView.getChildAt(0);
+            return firstVisibleChild != null ?
+                    recyclerView.getChildAdapterPosition(firstVisibleChild) : -1;
+        }
+
+        /**
+         * 判断最后一个条目是否完全可见
+         *
+         * @param recyclerView
+         * @return
+         */
+        private boolean isLastItemVisible(RecyclerView recyclerView) {
+            final RecyclerView.Adapter<?> adapter = recyclerView.getAdapter();
+            // 如果未设置Adapter或者Adapter没有数据可以上拉刷新
+            if (null == adapter || adapter.getItemCount() == 0) {
+                return true;
+            }
+            // 最后一个条目View完全展示,可以刷新
+            int lastVisiblePosition = getLastVisiblePosition(recyclerView);
+            if (lastVisiblePosition >= recyclerView.getAdapter().getItemCount() - 1) {
+                return recyclerView.getChildAt(recyclerView.getChildCount() - 1).getBottom()
+                        <= recyclerView.getBottom();
+            }
+            return false;
+        }
+
+        /**
+         * 获取最后一个可见子View的位置下标
+         *
+         * @param recyclerView
+         * @return
+         */
+        private int getLastVisiblePosition(RecyclerView recyclerView) {
+            View lastVisibleChild = recyclerView.getChildAt(recyclerView.getChildCount() - 1);
+            return lastVisibleChild != null ? recyclerView.getChildAdapterPosition(lastVisibleChild) : -1;
         }
     }
 }

@@ -12,13 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.mylhyl.rslayout.OnListLoadListener;
+import com.mylhyl.rslayout.internal.IFooterLayout;
+import com.mylhyl.rslayout.internal.OnListLoadListener;
 import com.mylhyl.rslayout.SwipeRefreshGridView;
-import com.mylhyl.rslayout.SwipeRefreshListView;
 import com.mylhyl.swiperefreshLayout.sample.R;
 
 import java.util.ArrayList;
@@ -51,6 +50,12 @@ public class GridViewXmlFragment extends Fragment implements SwipeRefreshLayout.
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         swipeRefreshGridView = (SwipeRefreshGridView) view.findViewById(R.id.swipeRefresh);
+        IFooterLayout footerLayout = swipeRefreshGridView.getFooterLayout();
+        footerLayout.setFooterText("set自定义加载");
+        footerLayout.setIndeterminateDrawable(getResources().getDrawable(R.drawable.footer_progressbar));
+        ImageView emptyView = new ImageView(getContext());
+        emptyView.setImageResource(R.mipmap.empty);
+        swipeRefreshGridView.setEmptyView(emptyView);
     }
 
     @Override
@@ -66,8 +71,6 @@ public class GridViewXmlFragment extends Fragment implements SwipeRefreshLayout.
         }
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, objects);
         swipeRefreshGridView.setAdapter(adapter);
-
-        swipeRefreshGridView.setEmptyText("空空的哦！");
     }
 
 

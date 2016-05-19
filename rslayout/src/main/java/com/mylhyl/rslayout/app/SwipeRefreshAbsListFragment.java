@@ -4,18 +4,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 
 import com.mylhyl.rslayout.BaseSwipeRefresh;
-import com.mylhyl.rslayout.OnListLoadListener;
+import com.mylhyl.rslayout.internal.OnListLoadListener;
 import com.mylhyl.rslayout.SwipeRefreshAbsListView;
-import com.mylhyl.rslayout.SwipeRefreshListView;
 
 
 /**

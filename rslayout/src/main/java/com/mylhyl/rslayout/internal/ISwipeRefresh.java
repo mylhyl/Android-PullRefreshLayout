@@ -1,4 +1,4 @@
-package com.mylhyl.rslayout;
+package com.mylhyl.rslayout.internal;
 
 import android.view.View;
 
@@ -50,4 +50,6 @@ public interface ISwipeRefresh<T> {
      * @return
      */
     T getScrollView();
+
+    IFooterLayout getFooterLayout();
 }

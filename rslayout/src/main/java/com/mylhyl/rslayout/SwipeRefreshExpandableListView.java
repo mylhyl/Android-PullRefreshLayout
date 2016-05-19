@@ -1,7 +1,6 @@
 package com.mylhyl.rslayout;
 
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
