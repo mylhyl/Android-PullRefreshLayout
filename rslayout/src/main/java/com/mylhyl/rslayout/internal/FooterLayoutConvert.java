@@ -25,6 +25,6 @@ public final class FooterLayoutConvert extends FooterLayoutBase implements IFoot
             else if (childAt instanceof TextView)
                 mTextView = (TextView) childAt;
         }
-        addView(v, getLayoutParams());
+        addView(v);
     }
 }

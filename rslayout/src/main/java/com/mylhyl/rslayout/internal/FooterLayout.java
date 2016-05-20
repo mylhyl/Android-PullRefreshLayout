@@ -16,6 +16,8 @@ public final class FooterLayout extends FooterLayoutBase {
 
     @Override
     void createFooter(ViewGroup v) {
+        v.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, pxTdp(100)));
+
         mProgressBar = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmallInverse);
         v.addView(mProgressBar, new AbsListView.LayoutParams(
                 AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));

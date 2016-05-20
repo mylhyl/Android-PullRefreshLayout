@@ -36,15 +36,14 @@ public abstract class FooterLayoutBase extends LinearLayout implements IFooterLa
     private void init() {
         setOrientation(LinearLayout.HORIZONTAL);
         setGravity(Gravity.CENTER);
-        setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, pxTdp(100)));
     }
 
     protected int pxTdp(int height) {
         float scale = getResources().getDisplayMetrics().density;
         return (int) (height / scale + 0.5f);
     }
-
-    public void setHeight(int height) {
+    @Override
+    public void setFooterHeight(int height) {
         ViewGroup.LayoutParams params = getLayoutParams();
         params.height = pxTdp(height);
         setLayoutParams(params);

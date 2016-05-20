@@ -15,10 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mylhyl.rslayout.BaseSwipeRefresh;
+import com.mylhyl.rslayout.SwipeRefreshExpandableListView;
 import com.mylhyl.rslayout.app.SwipeRefreshExpandableListFragment;
-import com.mylhyl.rslayout.internal.IFooterLayout;
 import com.mylhyl.swiperefreshLayout.sample.R;
-import com.mylhyl.swiperefreshLayout.sample.widget.MySwipeRefreshExpandableListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +41,6 @@ public class DemoSwipeRefreshExpandableListFragment extends SwipeRefreshExpandab
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
         setEnabledLoad(true);
-        IFooterLayout footerLayout = getSwipeRefreshLayout().getFooterLayout();
-        footerLayout.setFooterText("fffffffffffff");
         for (int i = 0; i < footerIndex; i++) {
             groups.add("group = " + i);
             List<String> child = new ArrayList<>();
@@ -59,7 +56,7 @@ public class DemoSwipeRefreshExpandableListFragment extends SwipeRefreshExpandab
 
     @Override
     public BaseSwipeRefresh createSwipeRefreshLayout() {
-        return new MySwipeRefreshExpandableListView(getActivity());
+        return new SwipeRefreshExpandableListView(getActivity());
     }
 
     @Override

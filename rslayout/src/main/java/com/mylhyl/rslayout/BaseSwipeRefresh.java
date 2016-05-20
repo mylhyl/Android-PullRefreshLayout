@@ -203,14 +203,15 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
 
     private void addFooterView() {
         if (mFooterView == null) {
-            mFooterView = createFooter();//创建上拉加载 View
+            mFooterView = createFooter(this);//创建上拉加载 View
             if (mFooterView == null)
-                throw new RuntimeException("call setOnListLoadListener after, abstract method onCreateFooterView cannot return null");
+                throw new RuntimeException("method onCreateFooterView cannot return null");
+            //如是自定义 FooterView 的，则转换
             boolean b = mFooterView instanceof IFooterLayout;
             if (!b) {
                 mFooterView = new FooterLayoutConvert(getContext(), mFooterView);
+                addView(mFooterView);
             }
-            addView(mFooterView);
             hideFooter();
         }
     }
@@ -218,11 +219,13 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     /**
      * 创建上拉加载 view 子类可重写
      *
+     * @param root
      * @return
      */
-    protected View createFooter() {
+    protected View createFooter(ViewGroup root) {
         FooterLayout footerLayout = new FooterLayout(getContext());
         footerLayout.setFooterText("加载数据中...");
+        root.addView(footerLayout);
         return footerLayout;
     }
 
