@@ -3,16 +3,10 @@ package com.mylhyl.rslayout;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.util.AttributeSet;
-import android.view.Gravity;
-import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.mylhyl.rslayout.BaseSwipeRefresh;
 import com.mylhyl.rslayout.internal.SwipeRefreshOnScrollListener;
 
 /**
@@ -22,7 +16,7 @@ import com.mylhyl.rslayout.internal.SwipeRefreshOnScrollListener;
  */
 public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends BaseSwipeRefresh<T> {
     private ListAdapter mEmptyDataSetAdapter;
-    protected EmptyDataSetObserver mDataSetObserver;
+    private EmptyDataSetObserver mDataSetObserver;
 
     public SwipeRefreshAbsListView(Context context) {
         super(context);
@@ -46,10 +40,10 @@ public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends Bas
             throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
         getScrollView().setOnScrollListener(new SwipeRefreshOnScrollListener(getLoadSwipeRefresh()));
         getScrollView().setAdapter(adapter);
-        setEmptyDataAdapter(adapter);
+        registerDataSetObserver(adapter);
     }
 
-    void setEmptyDataAdapter(ListAdapter adapter) {
+    final void registerDataSetObserver(ListAdapter adapter) {
         mEmptyDataSetAdapter = adapter;
         if (mEmptyDataSetAdapter != null && mDataSetObserver != null) {
             mEmptyDataSetAdapter.unregisterDataSetObserver(mDataSetObserver);
@@ -69,7 +63,7 @@ public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends Bas
         }
     }
 
-    class EmptyDataSetObserver extends DataSetObserver {
+    private class EmptyDataSetObserver extends DataSetObserver {
         @Override
         public void onChanged() {
             updateEmptyViewShown(mEmptyDataSetAdapter == null || mEmptyDataSetAdapter.isEmpty());

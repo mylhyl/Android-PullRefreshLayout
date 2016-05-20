@@ -8,7 +8,6 @@ import android.widget.ExpandableListView;
 
 import com.mylhyl.rslayout.BaseSwipeRefresh;
 import com.mylhyl.rslayout.SwipeRefreshExpandableListView;
-import com.mylhyl.rslayout.SwipeRefreshListView;
 
 /**
  * Created by hupei on 2016/5/16.

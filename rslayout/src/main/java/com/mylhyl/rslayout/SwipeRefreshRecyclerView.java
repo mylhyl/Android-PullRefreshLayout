@@ -1,22 +1,8 @@
 package com.mylhyl.rslayout;
 
 import android.content.Context;
-import android.database.DataSetObserver;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import com.mylhyl.rslayout.BaseSwipeRefresh;
 
 /**
  * SwipeRefreshLayout 加 RecyclerView 布局<br>
@@ -44,7 +30,7 @@ public class SwipeRefreshRecyclerView extends BaseSwipeRefresh<RecyclerView> {
             throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
         getScrollView().setOnScrollListener(new SwipeRefreshRVOnScrollListener());
         getScrollView().setAdapter(adapter);
-        setEmptyDataAdapter(adapter);
+        registerAdapterDataObserver(adapter);
     }
 
     public void setLayoutManager(RecyclerView.LayoutManager layout) {
@@ -59,7 +45,7 @@ public class SwipeRefreshRecyclerView extends BaseSwipeRefresh<RecyclerView> {
     }
 
 
-    private void setEmptyDataAdapter(RecyclerView.Adapter adapter) {
+    private void registerAdapterDataObserver(RecyclerView.Adapter adapter) {
         mEmptyDataSetAdapter = adapter;
         if (mEmptyDataSetAdapter != null && mDataSetObserver != null) {
             mEmptyDataSetAdapter.unregisterAdapterDataObserver(mDataSetObserver);

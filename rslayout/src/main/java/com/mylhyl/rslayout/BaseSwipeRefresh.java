@@ -10,13 +10,12 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mylhyl.rslayout.internal.FooterLayoutConvert;
 import com.mylhyl.rslayout.internal.FooterLayout;
+import com.mylhyl.rslayout.internal.FooterLayoutConvert;
 import com.mylhyl.rslayout.internal.IFooterLayout;
 import com.mylhyl.rslayout.internal.ISwipeRefresh;
 import com.mylhyl.rslayout.internal.LoadSwipeRefresh;
