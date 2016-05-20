@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import com.mylhyl.rslayout.internal.OnScrollRecyclerViewListener;
+
 /**
  * SwipeRefreshLayout 加 RecyclerView 布局<br>
  * <p> Created by hupei on 2016/5/12.
@@ -28,7 +30,7 @@ public class SwipeRefreshRecyclerView extends BaseSwipeRefresh<RecyclerView> {
     public final void setAdapter(RecyclerView.Adapter adapter) {
         if (adapter == null)
             throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
-        getScrollView().setOnScrollListener(new SwipeRefreshRVOnScrollListener());
+        getScrollView().setOnScrollListener(new OnScrollRecyclerViewListener(getLoadSwipeRefresh()));
         getScrollView().setAdapter(adapter);
         registerAdapterDataObserver(adapter);
     }

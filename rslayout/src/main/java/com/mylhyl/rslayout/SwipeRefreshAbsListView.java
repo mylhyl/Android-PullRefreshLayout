@@ -7,7 +7,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 
-import com.mylhyl.rslayout.internal.SwipeRefreshOnScrollListener;
+import com.mylhyl.rslayout.internal.OnScrollAbsListListener;
 
 /**
  * SwipeRefreshLayout 加 AbsListView 布局<br>
@@ -38,7 +38,7 @@ public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends Bas
     public final void setAdapter(ListAdapter adapter) {
         if (adapter == null)
             throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
-        getScrollView().setOnScrollListener(new SwipeRefreshOnScrollListener(getLoadSwipeRefresh()));
+        getScrollView().setOnScrollListener(new OnScrollAbsListListener(getLoadSwipeRefresh()));
         getScrollView().setAdapter(adapter);
         registerDataSetObserver(adapter);
     }

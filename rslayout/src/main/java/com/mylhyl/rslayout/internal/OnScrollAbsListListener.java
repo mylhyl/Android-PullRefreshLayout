@@ -6,15 +6,15 @@ import android.widget.AbsListView;
 /**
  * Created by hupei on 2016/5/20.
  */
-public final class SwipeRefreshOnScrollListener implements AbsListView.OnScrollListener {
+public final class OnScrollAbsListListener implements AbsListView.OnScrollListener {
     private LoadSwipeRefresh mLoadSwipeRefresh;
     private AbsListView.OnScrollListener mOnScrollListener;
 
-    public SwipeRefreshOnScrollListener(LoadSwipeRefresh loadSwipeRefresh) {
+    public OnScrollAbsListListener(LoadSwipeRefresh loadSwipeRefresh) {
         mLoadSwipeRefresh = loadSwipeRefresh;
     }
 
-    public SwipeRefreshOnScrollListener(LoadSwipeRefresh loadSwipeRefresh, AbsListView.OnScrollListener onScrollListener) {
+    public OnScrollAbsListListener(LoadSwipeRefresh loadSwipeRefresh, AbsListView.OnScrollListener onScrollListener) {
         mLoadSwipeRefresh = loadSwipeRefresh;
         mOnScrollListener = onScrollListener;
     }

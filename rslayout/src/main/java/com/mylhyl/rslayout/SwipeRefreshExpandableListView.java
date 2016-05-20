@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
-import com.mylhyl.rslayout.internal.SwipeRefreshOnScrollListener;
+import com.mylhyl.rslayout.internal.OnScrollAbsListListener;
 
 /**
  * SwipeRefreshLayout 包含 ExpandableListView 布局<br>
@@ -36,7 +36,7 @@ public class SwipeRefreshExpandableListView extends SwipeRefreshAbsListView<Expa
         mAdapter = adapter;
         if (mAdapter == null)
             throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
-        getScrollView().setOnScrollListener(new SwipeRefreshOnScrollListener(getLoadSwipeRefresh()));
+        getScrollView().setOnScrollListener(new OnScrollAbsListListener(getLoadSwipeRefresh()));
         getScrollView().setAdapter(mAdapter);
         registerDataSetObserver(new ExpandableListConnector(mAdapter));
     }
