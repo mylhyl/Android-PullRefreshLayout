@@ -8,8 +8,10 @@
  * 轻松设置 Adapter 空数据视图，默认为 TextView 支持更文字，也可自定义 View
  * 对于简单的界面，如只有 ListView 可以继承 [app](https://github.com/mylhyl/Android-PullRefreshLayout/tree/master/pullrefreshlayout/src/main/java/com/mylhyl/prlayout/app)
    包中 Fragment 轻松搞定
-# 效果图
-<img src="preview/gif.gif" />
+
+#效果图
+<img src="preview/gif.gif" width="240px"/>
+
 #使用
   仔细看 listSelector 属性，效果见 sample
 ```xml
