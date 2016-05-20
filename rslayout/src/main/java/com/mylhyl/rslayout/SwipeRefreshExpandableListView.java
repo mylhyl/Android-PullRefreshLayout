@@ -1,6 +1,7 @@
 package com.mylhyl.rslayout;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class SwipeRefreshExpandableListView extends SwipeRefreshAbsListView<Expa
             throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
         getScrollView().setOnScrollListener(new SwipeRefreshOnScrollListener(getLoadSwipeRefresh()));
         getScrollView().setAdapter(mAdapter);
-        setEmptyDataAdapter(new ExpandableListConnector(mAdapter));
+        registerDataSetObserver(new ExpandableListConnector(mAdapter));
     }
 
     @Override
@@ -61,13 +62,13 @@ public class SwipeRefreshExpandableListView extends SwipeRefreshAbsListView<Expa
         }
 
         @Override
-        public boolean isEmpty() {
-            return getCount() == 0;
+        public void registerDataSetObserver(DataSetObserver observer) {
+            mExpandableListAdapter.registerDataSetObserver(observer);
         }
 
         @Override
-        public void notifyDataSetChanged() {
-            super.notifyDataSetChanged();
+        public void unregisterDataSetObserver(DataSetObserver observer) {
+            mExpandableListAdapter.unregisterDataSetObserver(observer);
         }
 
         @Override
