@@ -16,6 +16,8 @@ public interface ISwipeRefresh<T> {
 
     void setRefreshing(boolean refreshing);
 
+    void loadData();
+
     /**
      * 设置是否处于上拉加载状态
      *

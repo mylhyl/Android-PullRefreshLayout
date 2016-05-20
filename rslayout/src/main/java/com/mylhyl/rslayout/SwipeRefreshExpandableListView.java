@@ -8,9 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
+import com.mylhyl.rslayout.internal.SwipeRefreshOnScrollListener;
+
 /**
  * SwipeRefreshLayout 包含 ExpandableListView 布局<br>
- * 如须自定义加载框，可继承此类重写 {@link #createFooter() createFooter}
+ * 如须自定义加载框，可继承此类重写 {@link #createFooter(ViewGroup)}  createFooter}
  * <p>Created by hupei on 2016/5/16.
  */
 public class SwipeRefreshExpandableListView extends SwipeRefreshAbsListView<ExpandableListView> {
@@ -33,9 +35,9 @@ public class SwipeRefreshExpandableListView extends SwipeRefreshAbsListView<Expa
         mAdapter = adapter;
         if (mAdapter == null)
             throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
-        getScrollView().setOnScrollListener(new SwipeRefreshOnScrollListener());
+        getScrollView().setOnScrollListener(new SwipeRefreshOnScrollListener(getLoadSwipeRefresh()));
         getScrollView().setAdapter(mAdapter);
-        super.setEmptyDataAdapter(new ExpandableListConnector(mAdapter));
+        setEmptyDataAdapter(new ExpandableListConnector(mAdapter));
     }
 
     @Override
@@ -56,6 +58,16 @@ public class SwipeRefreshExpandableListView extends SwipeRefreshAbsListView<Expa
         public int getCount() {
             if (mExpandableListAdapter == null) return 0;
             return mExpandableListAdapter.getGroupCount();
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return getCount() == 0;
+        }
+
+        @Override
+        public void notifyDataSetChanged() {
+            super.notifyDataSetChanged();
         }
 
         @Override

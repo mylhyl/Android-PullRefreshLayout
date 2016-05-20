@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mylhyl.rslayout.BaseSwipeRefresh;
+import com.mylhyl.rslayout.internal.SwipeRefreshOnScrollListener;
 
 /**
  * SwipeRefreshLayout 加 AbsListView 布局<br>
@@ -21,7 +22,7 @@ import com.mylhyl.rslayout.BaseSwipeRefresh;
  */
 public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends BaseSwipeRefresh<T> {
     private ListAdapter mEmptyDataSetAdapter;
-    private EmptyDataSetObserver mDataSetObserver;
+    protected EmptyDataSetObserver mDataSetObserver;
 
     public SwipeRefreshAbsListView(Context context) {
         super(context);
@@ -43,12 +44,12 @@ public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends Bas
     public final void setAdapter(ListAdapter adapter) {
         if (adapter == null)
             throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
-        getScrollView().setOnScrollListener(new SwipeRefreshOnScrollListener());
+        getScrollView().setOnScrollListener(new SwipeRefreshOnScrollListener(getLoadSwipeRefresh()));
         getScrollView().setAdapter(adapter);
         setEmptyDataAdapter(adapter);
     }
 
-      void setEmptyDataAdapter(ListAdapter adapter) {
+    void setEmptyDataAdapter(ListAdapter adapter) {
         mEmptyDataSetAdapter = adapter;
         if (mEmptyDataSetAdapter != null && mDataSetObserver != null) {
             mEmptyDataSetAdapter.unregisterDataSetObserver(mDataSetObserver);
@@ -68,7 +69,7 @@ public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends Bas
         }
     }
 
-    private class EmptyDataSetObserver extends DataSetObserver {
+    class EmptyDataSetObserver extends DataSetObserver {
         @Override
         public void onChanged() {
             updateEmptyViewShown(mEmptyDataSetAdapter == null || mEmptyDataSetAdapter.isEmpty());

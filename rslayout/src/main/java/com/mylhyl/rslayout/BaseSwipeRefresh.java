@@ -26,11 +26,10 @@ import com.mylhyl.rslayout.internal.OnListLoadListener;
  * android v4 兼容包 中 SwipeRefreshLayout 刷新控件，支持上拉加载
  * <p/>
  * <pre>
- * 实现原理是利用 {@link SwipeRefreshOnScrollListener#onScrollStateChanged(AbsListView, int) OnScrollListener} 事件控制
  * 此处主要封装以下几点：
  * 1.手动显示刷新动画 {@link #showRefreshHeader}
- * 2.支持上拉加载
- * 3.解决 SwipeRefreshLayout 与 可滑动控件{@link SwipeRefreshOnScrollListener#onScroll(AbsListView, int, int, int) 使用过程中冲突的问题}
+ * 2.支持上拉加载，并可自定义
+ * 3.解决 SwipeRefreshLayout 与可滑动控件使用过程中冲突的问题
  * </pre>
  * Created by hupei on 2016/5/12.
  */
@@ -237,7 +236,8 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
             mOnRefreshListener.onRefresh();
     }
 
-    private void loadData() {
+    @Override
+    public void loadData() {
         if (mOnListLoadListener != null) {
             setLoading(true);// 设置状态
             mOnListLoadListener.onListLoad();
@@ -295,57 +295,15 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
         return null;
     }
 
+    LoadSwipeRefresh getLoadSwipeRefresh() {
+        return mLoadSwipeRefresh;
+    }
+
     /**
      * SwipeRefreshLayout结合ListView使用的时候有时候存在下拉冲突
      * 现象：当第一个item长度超过一屏，明明还没有到达列表顶部，Scroll事件就被拦截，列表无法滚动，同时启动了刷新。
      */
-    final class SwipeRefreshOnScrollListener implements AbsListView.OnScrollListener {
-        private AbsListView.OnScrollListener mOnScrollListener;
 
-        public SwipeRefreshOnScrollListener() {
-        }
-
-        public SwipeRefreshOnScrollListener(AbsListView.OnScrollListener onScrollListener) {
-            mOnScrollListener = onScrollListener;
-        }
-
-        @Override
-        public void onScrollStateChanged(AbsListView view, int scrollState) {
-            /**
-             正在滚动时回调，回调2-3次，手指没抛则回调2次。scrollState = 2的这次不回调
-             回调顺序如下：
-             SCROLL_STATE_TOUCH_SCROLL = 1     正在滚动
-             SCROLL_STATE_FLING = 2            手指做了抛的动作（手指离开屏幕前，用力滑了一下）
-             SCROLL_STATE_IDLE = 0             停止滚动
-             */
-            if (null != mOnScrollListener)
-                mOnScrollListener.onScrollStateChanged(view, scrollState);
-        }
-
-        @Override
-        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-            /**
-             滚动时一直回调，直到停止滚动时才停止回调。单击时回调一次。
-             firstVisibleItem：当前能看见的第一个列表项ID（从0开始）
-             visibleItemCount：当前能看见的列表项个数（小半个也算）
-             totalItemCount：列表项共数
-             */
-            final View firstView = view.getChildAt(firstVisibleItem);
-            // 当firstVisibleItem是第0位。如果firstView==null说明列表为空，需要刷新;或者top==0说明已经到达列表顶部
-            if (firstVisibleItem == 0 && (firstView == null || firstView.getTop() == 0)) {
-                mLoadSwipeRefresh.setEnabled(true);
-            } else {
-                mLoadSwipeRefresh.setEnabled(false);
-                if (isEnabledLoad() && !isLoading()
-                        && view.getLastVisiblePosition() == (totalItemCount - 1)) {
-                    loadData();// 滑动底部自动执行上拉加载
-                }
-            }
-
-            if (null != mOnScrollListener)
-                mOnScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
-        }
-    }
 
     final class SwipeRefreshRVOnScrollListener extends RecyclerView.OnScrollListener {
         @Override
