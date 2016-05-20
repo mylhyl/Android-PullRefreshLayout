@@ -7,6 +7,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
+ * 转换自定义上拉加载 View
  * Created by hupei on 2016/5/19.
  */
 public final class FooterLayoutConvert extends FooterLayoutBase implements IFooterLayout {
@@ -17,6 +18,7 @@ public final class FooterLayoutConvert extends FooterLayoutBase implements IFoot
 
     @Override
     void createFooter(ViewGroup v) {
+        //查找 mProgressBar 与 mTextView
         int count = v.getChildCount();
         for (int i = 0; i < count; i++) {
             View childAt = v.getChildAt(i);

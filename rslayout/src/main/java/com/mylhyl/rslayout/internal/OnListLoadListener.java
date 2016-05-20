@@ -6,9 +6,6 @@ package com.mylhyl.rslayout.internal;
 public interface OnListLoadListener {
     /**
      * 当上拉加载时，此方法将被调用
-     *
-     * @author hupei
-     * @date 2015年7月30日 上午11:08:35
      */
     void onListLoad();
 }

@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
+ * 上拉加载 layout 基类
  * Created by hupei on 2016/5/19.
  */
 public abstract class FooterLayoutBase extends LinearLayout implements IFooterLayout {

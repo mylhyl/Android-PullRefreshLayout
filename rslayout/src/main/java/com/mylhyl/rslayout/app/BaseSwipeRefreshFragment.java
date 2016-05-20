@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2014. hupei (hupei132@qq.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.mylhyl.rslayout.app;
 
 import android.os.Bundle;
@@ -34,9 +19,6 @@ import com.mylhyl.rslayout.SwipeRefreshListView;
  * 注：SwipeRefreshLayout 只能有一个 childView，childView自身必须是可滚动的view<br>
  * 或 childView 必须包含可滚动的view，如ScrollView或者ListView<br>
  * 子类继承重写 onCreateView 必须 super
- *
- * @author hupei
- * @date 2015年7月31日 上午9:05:42
  */
 abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
         implements SwipeRefreshLayout.OnRefreshListener, OnListLoadListener {

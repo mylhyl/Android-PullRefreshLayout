@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
+ * 上拉加载 layout 包含 ProgressBar 与 TextView
  * Created by hupei on 2016/5/19.
  */
 public final class FooterLayout extends FooterLayoutBase {
