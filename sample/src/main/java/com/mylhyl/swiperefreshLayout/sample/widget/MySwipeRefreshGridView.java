@@ -6,19 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mylhyl.rslayout.SwipeRefreshExpandableListView;
-import com.mylhyl.rslayout.SwipeRefreshListView;
+import com.mylhyl.rslayout.SwipeRefreshGridView;
 import com.mylhyl.swiperefreshLayout.sample.R;
 
 /**
  * Created by hupei on 2016/5/16.
  */
-public class MySwipeRefreshListView extends SwipeRefreshListView {
-    public MySwipeRefreshListView(Context context) {
+public class MySwipeRefreshGridView extends SwipeRefreshGridView {
+    public MySwipeRefreshGridView(Context context) {
         super(context);
     }
 
-    public MySwipeRefreshListView(Context context, AttributeSet attrs) {
+    public MySwipeRefreshGridView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

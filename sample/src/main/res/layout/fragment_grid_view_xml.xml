@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.mylhyl.rslayout.SwipeRefreshGridView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.mylhyl.swiperefreshLayout.sample.widget.MySwipeRefreshGridView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRefresh"
     android:layout_width="match_parent"
@@ -7,4 +7,4 @@
     android:numColumns="2"
     tools:context=".app.ListViewXmlFragment">
 
-</com.mylhyl.rslayout.SwipeRefreshGridView>
+</com.mylhyl.swiperefreshLayout.sample.widget.MySwipeRefreshGridView>

@@ -23,25 +23,19 @@ public abstract class FooterLayoutBase extends LinearLayout implements IFooterLa
 
     public FooterLayoutBase(Context context) {
         super(context);
-        init();
         createFooter(this);
     }
 
     public FooterLayoutBase(Context context, View v) {
         super(context);
-        init();
         createFooter((ViewGroup) v);
-    }
-
-    private void init() {
-        setOrientation(LinearLayout.HORIZONTAL);
-        setGravity(Gravity.CENTER);
     }
 
     protected int pxTdp(int height) {
         float scale = getResources().getDisplayMetrics().density;
         return (int) (height / scale + 0.5f);
     }
+
     @Override
     public void setFooterHeight(int height) {
         ViewGroup.LayoutParams params = getLayoutParams();
@@ -62,7 +56,7 @@ public abstract class FooterLayoutBase extends LinearLayout implements IFooterLa
     }
 
     @Override
-    public void setFooterColor(@ColorInt int color) {
+    public void setFooterTextColor(@ColorInt int color) {
         if (mTextView != null)
             mTextView.setTextColor(color);
     }

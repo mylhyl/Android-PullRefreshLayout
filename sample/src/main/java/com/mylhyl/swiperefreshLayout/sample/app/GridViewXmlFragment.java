@@ -50,9 +50,6 @@ public class GridViewXmlFragment extends Fragment implements SwipeRefreshLayout.
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         swipeRefreshGridView = (SwipeRefreshGridView) view.findViewById(R.id.swipeRefresh);
-        IFooterLayout footerLayout = swipeRefreshGridView.getFooterLayout();
-        footerLayout.setFooterText("set自定义加载");
-        footerLayout.setIndeterminateDrawable(getResources().getDrawable(R.drawable.footer_progressbar));
         ImageView emptyView = new ImageView(getContext());
         emptyView.setImageResource(R.mipmap.empty);
         swipeRefreshGridView.setEmptyView(emptyView);

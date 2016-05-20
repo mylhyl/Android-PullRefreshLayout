@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.mylhyl.rslayout.internal.IFooterLayout;
 import com.mylhyl.rslayout.internal.OnListLoadListener;
 import com.mylhyl.rslayout.SwipeRefreshListView;
 import com.mylhyl.swiperefreshLayout.sample.R;
@@ -48,6 +49,10 @@ public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         swipeRefreshListView = (SwipeRefreshListView) view.findViewById(R.id.swipeRefresh);
+        IFooterLayout footerLayout = swipeRefreshListView.getFooterLayout();
+        footerLayout.setFooterText("set自定义加载");
+        footerLayout.setIndeterminateDrawable(getResources().getDrawable(R.drawable.footer_progressbar));
+        swipeRefreshListView.setEmptyText("数据呢？");
     }
 
     @Override
@@ -63,7 +68,7 @@ public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.
         }
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, objects);
         swipeRefreshListView.setAdapter(adapter);
-        swipeRefreshListView.setEmptyText("数据呢？");
+
     }
 
 
