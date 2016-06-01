@@ -112,16 +112,16 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
         addView(loadSwipeRefresh, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1));
     }
 
-    public final void showRefreshHeader() {
-        mLoadSwipeRefresh.showRefreshHeader();
+    public final void autoRefresh() {
+        mLoadSwipeRefresh.autoRefresh();
     }
 
-    public final void showRefreshHeader(int... colorResIds) {
-        mLoadSwipeRefresh.showRefreshHeader(colorResIds);
+    public final void autoRefresh(int... colorResIds) {
+        mLoadSwipeRefresh.autoRefresh(colorResIds);
     }
 
-    public final void showRefreshHeader(boolean scale, int start, int end, int... colorResIds) {
-        mLoadSwipeRefresh.showRefreshHeader(scale, start, end, colorResIds);
+    public final void autoRefresh(boolean scale, int start, int end, int... colorResIds) {
+        mLoadSwipeRefresh.autoRefresh(scale, start, end, colorResIds);
     }
 
     @Override

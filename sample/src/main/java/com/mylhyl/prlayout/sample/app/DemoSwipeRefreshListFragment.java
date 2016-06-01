@@ -32,7 +32,7 @@ public class DemoSwipeRefreshListFragment extends SwipeRefreshListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-        getSwipeRefreshLayout().showRefreshHeader();
+        getSwipeRefreshLayout().autoRefresh();
         setEnabledLoad(true);
 
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, objects);
