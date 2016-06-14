@@ -9,8 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
-import com.mylhyl.prlayout.internal.OnScrollAbsListListener;
-
 /**
  * SwipeRefreshLayout 包含 ExpandableListView 布局<br>
  * 如须自定义加载框，可继承此类重写 {@link #getFooterResource()}  getFooterResource}

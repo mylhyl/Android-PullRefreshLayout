@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
-import com.mylhyl.prlayout.BaseSwipeRefresh;
-import com.mylhyl.prlayout.internal.OnListLoadListener;
 import com.mylhyl.prlayout.SwipeRefreshListView;
+import com.mylhyl.prlayout.internal.ISwipeRefresh;
+import com.mylhyl.prlayout.internal.OnListLoadListener;
 
 /**
  * Google自家下拉刷新 SwipeRefreshLayout <br>
@@ -28,9 +28,9 @@ abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
      *
      * @return
      */
-    public abstract BaseSwipeRefresh<T> createSwipeRefreshLayout();
+    public abstract ISwipeRefresh<T> createSwipeRefreshLayout();
 
-    private BaseSwipeRefresh mSwipeRefresh;
+    private ISwipeRefresh mSwipeRefresh;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,14 +58,14 @@ abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
     }
 
     /**
-     * {@link BaseSwipeRefresh#setRefreshing(boolean)}
+     * {@link ISwipeRefresh#setRefreshing(boolean)}
      */
     public final void setRefreshing(boolean refreshing) {
         getSwipeRefreshLayout().setRefreshing(refreshing);
     }
 
     /**
-     * {@link BaseSwipeRefresh#setLoading(boolean)}
+     * {@link ISwipeRefresh#setLoading(boolean)}
      */
     public final void setLoading(boolean loading) {
         getSwipeRefreshLayout().setLoading(loading);
@@ -83,7 +83,7 @@ abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
         getSwipeRefreshLayout().setEmptyView(emptyView);
     }
 
-    public final BaseSwipeRefresh<T> getSwipeRefreshLayout() {
+    public final ISwipeRefresh<T> getSwipeRefreshLayout() {
         return mSwipeRefresh;
     }
 

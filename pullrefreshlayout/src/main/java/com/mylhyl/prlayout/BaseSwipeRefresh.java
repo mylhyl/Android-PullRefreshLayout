@@ -18,7 +18,6 @@ import com.mylhyl.prlayout.internal.FooterLayout;
 import com.mylhyl.prlayout.internal.FooterLayoutConvert;
 import com.mylhyl.prlayout.internal.IFooterLayout;
 import com.mylhyl.prlayout.internal.ISwipeRefresh;
-import com.mylhyl.prlayout.internal.LoadSwipeRefresh;
 import com.mylhyl.prlayout.internal.OnListLoadListener;
 
 /**
@@ -32,7 +31,7 @@ import com.mylhyl.prlayout.internal.OnListLoadListener;
  * </pre>
  * Created by hupei on 2016/5/12.
  */
-public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements ISwipeRefresh {
+abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements ISwipeRefresh {
 
     /**
      * 创建可滑动 View，子类实现
@@ -114,14 +113,17 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
         addView(loadSwipeRefresh, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1));
     }
 
+    @Override
     public final void autoRefresh() {
         mLoadSwipeRefresh.autoRefresh();
     }
 
+    @Override
     public final void autoRefresh(int... colorResIds) {
         mLoadSwipeRefresh.autoRefresh(colorResIds);
     }
 
+    @Override
     public final void autoRefresh(boolean scale, int start, int end, int... colorResIds) {
         mLoadSwipeRefresh.autoRefresh(scale, start, end, colorResIds);
     }
@@ -184,11 +186,13 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
             mEmptyView.setVisibility(shown ? View.VISIBLE : View.GONE);
     }
 
+    @Override
     public final void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener) {
         mOnRefreshListener = listener;
         mLoadSwipeRefresh.setOnRefreshListener(listener);
     }
 
+    @Override
     public final void setOnListLoadListener(OnListLoadListener onListLoadListener) {
         this.mOnListLoadListener = onListLoadListener;
         setEnabledLoad(mOnListLoadListener != null);

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
-import com.mylhyl.prlayout.internal.OnScrollRecyclerViewListener;
-
 /**
  * SwipeRefreshLayout 加 RecyclerView 布局<br>
  * 如须自定义加载框，可继承此类重写 {@link #getFooterResource()}  getFooterResource}方法

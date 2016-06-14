@@ -1,11 +1,22 @@
 package com.mylhyl.prlayout.internal;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
 /**
  * Created by hupei on 2016/5/18.
  */
 public interface ISwipeRefresh<T> {
+    void autoRefresh();
+
+    void autoRefresh(int... colorResIds);
+
+    void autoRefresh(boolean scale, int start, int end, int... colorResIds);
+
+    void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener);
+
+    void setOnListLoadListener(OnListLoadListener onListLoadListener);
+
     void setFooterResource(int resource);
 
     void setEmptyText(CharSequence text);

@@ -1,11 +1,13 @@
-package com.mylhyl.prlayout.internal;
+package com.mylhyl.prlayout;
 
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 
-public final class LoadSwipeRefresh extends SwipeRefreshLayout {
+import com.mylhyl.prlayout.internal.ISwipeRefresh;
+
+final class LoadSwipeRefresh extends SwipeRefreshLayout {
     // Default offset in dips from the top of the view to where the progress spinner should stop
     private static final int DEFAULT_CIRCLE_TARGET = 64;
     private float mSpinnerFinalOffset;

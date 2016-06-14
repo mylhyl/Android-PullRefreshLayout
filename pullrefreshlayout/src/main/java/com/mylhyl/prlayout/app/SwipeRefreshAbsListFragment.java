@@ -9,8 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ListAdapter;
 
-import com.mylhyl.prlayout.BaseSwipeRefresh;
 import com.mylhyl.prlayout.SwipeRefreshAbsListView;
+import com.mylhyl.prlayout.internal.ISwipeRefresh;
 import com.mylhyl.prlayout.internal.OnListLoadListener;
 
 
@@ -36,7 +36,7 @@ abstract class SwipeRefreshAbsListFragment<T extends AbsListView> extends BaseSw
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        return getSwipeRefreshLayout();
+        return (View) getSwipeRefreshLayout();
     }
 
     /**
@@ -51,7 +51,7 @@ abstract class SwipeRefreshAbsListFragment<T extends AbsListView> extends BaseSw
         if (absListView instanceof ExpandableListView) {
             new RuntimeException("please call SwipeRefreshExpandableListFragment.setListAdapter()");
         }
-        BaseSwipeRefresh<T> swipeRefreshLayout = getSwipeRefreshLayout();
+        ISwipeRefresh<T> swipeRefreshLayout = getSwipeRefreshLayout();
         if (swipeRefreshLayout != null && swipeRefreshLayout instanceof SwipeRefreshAbsListView) {
             absListView.setVisibility(View.VISIBLE);
             absListView.setOnItemClickListener(mOnItemClickListener);

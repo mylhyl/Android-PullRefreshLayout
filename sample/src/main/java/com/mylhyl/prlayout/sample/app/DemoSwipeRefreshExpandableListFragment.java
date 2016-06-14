@@ -14,9 +14,9 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mylhyl.prlayout.BaseSwipeRefresh;
 import com.mylhyl.prlayout.SwipeRefreshExpandableListView;
 import com.mylhyl.prlayout.app.SwipeRefreshExpandableListFragment;
+import com.mylhyl.prlayout.internal.ISwipeRefresh;
 import com.mylhyl.prlayout.sample.R;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class DemoSwipeRefreshExpandableListFragment extends SwipeRefreshExpandab
     }
 
     @Override
-    public BaseSwipeRefresh createSwipeRefreshLayout() {
+    public ISwipeRefresh createSwipeRefreshLayout() {
         return new SwipeRefreshExpandableListView(getActivity());
     }
 
@@ -75,7 +75,7 @@ public class DemoSwipeRefreshExpandableListFragment extends SwipeRefreshExpandab
 
     @Override
     public void onRefresh() {
-        getSwipeRefreshLayout().postDelayed(new Runnable() {
+        getSwipeRefreshLayout().getScrollView().postDelayed(new Runnable() {
             @Override
             public void run() {
                 int count = --index;
@@ -93,7 +93,7 @@ public class DemoSwipeRefreshExpandableListFragment extends SwipeRefreshExpandab
 
     @Override
     public void onListLoad() {
-        getSwipeRefreshLayout().postDelayed(new Runnable() {
+        getSwipeRefreshLayout().getScrollView().postDelayed(new Runnable() {
             @Override
             public void run() {
                 int count = footerIndex + 3;

@@ -1,12 +1,14 @@
-package com.mylhyl.prlayout.internal;
+package com.mylhyl.prlayout;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.mylhyl.prlayout.internal.ISwipeRefresh;
+
 /**
  * Created by hupei on 2016/5/20.
  */
-public final class OnScrollRecyclerViewListener extends RecyclerView.OnScrollListener {
+final class OnScrollRecyclerViewListener extends RecyclerView.OnScrollListener {
     private LoadSwipeRefresh mLoadSwipeRefresh;
     private RecyclerView.OnScrollListener mOnScrollListener;
 

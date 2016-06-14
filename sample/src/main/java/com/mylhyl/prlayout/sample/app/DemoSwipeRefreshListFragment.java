@@ -57,7 +57,7 @@ public class DemoSwipeRefreshListFragment extends SwipeRefreshListFragment {
 
     @Override
     public void onRefresh() {
-        getSwipeRefreshLayout().postDelayed(new Runnable() {
+        getSwipeRefreshLayout().getScrollView().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (adapter.isEmpty()) {
@@ -75,7 +75,7 @@ public class DemoSwipeRefreshListFragment extends SwipeRefreshListFragment {
 
     @Override
     public void onListLoad() {
-        getSwipeRefreshLayout().postDelayed(new Runnable() {
+        getSwipeRefreshLayout().getScrollView().postDelayed(new Runnable() {
             @Override
             public void run() {
                 int count = footerIndex + 5;

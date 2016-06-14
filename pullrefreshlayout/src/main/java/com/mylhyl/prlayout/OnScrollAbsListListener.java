@@ -1,12 +1,14 @@
-package com.mylhyl.prlayout.internal;
+package com.mylhyl.prlayout;
 
 import android.view.View;
 import android.widget.AbsListView;
 
+import com.mylhyl.prlayout.internal.ISwipeRefresh;
+
 /**
  * Created by hupei on 2016/5/20.
  */
-public final class OnScrollAbsListListener implements AbsListView.OnScrollListener {
+final class OnScrollAbsListListener implements AbsListView.OnScrollListener {
     private LoadSwipeRefresh mLoadSwipeRefresh;
     private AbsListView.OnScrollListener mOnScrollListener;
 

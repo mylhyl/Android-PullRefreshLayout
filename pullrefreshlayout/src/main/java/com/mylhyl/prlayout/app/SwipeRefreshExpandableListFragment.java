@@ -6,8 +6,8 @@ import android.widget.AdapterView;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
-import com.mylhyl.prlayout.BaseSwipeRefresh;
 import com.mylhyl.prlayout.SwipeRefreshExpandableListView;
+import com.mylhyl.prlayout.internal.ISwipeRefresh;
 
 /**
  * Created by hupei on 2016/5/16.
@@ -42,13 +42,13 @@ public abstract class SwipeRefreshExpandableListFragment extends SwipeRefreshAbs
     }
 
     @Override
-    public BaseSwipeRefresh createSwipeRefreshLayout() {
+    public ISwipeRefresh createSwipeRefreshLayout() {
         return new SwipeRefreshExpandableListView(getActivity());
     }
 
     public final void setListAdapter(ExpandableListAdapter adapter) {
         AbsListView refreshChildView = getSwipeRefreshLayout().getScrollView();
-        BaseSwipeRefresh swipeRefreshLayout = getSwipeRefreshLayout();
+        ISwipeRefresh swipeRefreshLayout = getSwipeRefreshLayout();
         if (refreshChildView != null && refreshChildView instanceof ExpandableListView
                 && swipeRefreshLayout != null && swipeRefreshLayout instanceof SwipeRefreshExpandableListView) {
             ExpandableListView expandableListView = (ExpandableListView) refreshChildView;

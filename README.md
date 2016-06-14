@@ -24,23 +24,49 @@
     tools:context=".app.ListViewXmlFragment" />
 ```
  设置上拉加载，更多方法见 [IFooterLayout](https://github.com/mylhyl/Android-PullRefreshLayout/blob/master/pullrefreshlayout/src/main/java/com/mylhyl/prlayout/internal/IFooterLayout.java)
- ```java
+```java
         IFooterLayout footerLayout = swipeRefreshListView.getFooterLayout();
         footerLayout.setFooterText("set自定义加载");
         footerLayout.setIndeterminateDrawable(getResources().getDrawable(R.drawable.footer_progressbar));
- ```
+```
+ 自定义上拉加载
+ 
+ * 方式一：注意此方法必须在 setOnListLoadListener 之前调用
+ 
+```java
+        getSwipeRefreshLayout().setFooterResource(R.layout.swipe_refresh_footer);        
+        
+```
+ * 方式二：继承重写 getFooterResource() 方法
+ 
+```java
+        public class MySwipeRefreshGridView extends SwipeRefreshGridView {
+            public MySwipeRefreshGridView(Context context) {
+                super(context);
+            }
+        
+            public MySwipeRefreshGridView(Context context, AttributeSet attrs) {
+                super(context, attrs);
+            }
+        
+            @Override
+            protected int getFooterResource() {
+                return R.layout.swipe_refresh_footer;
+            }
+        }
+```
+设置adapter空数据视图文字
+```java
+        swipeRefreshListView.setEmptyText("数据呢？");
+```
  自定义adapter空数据视图
- ```java
+```java
         ImageView emptyView = new ImageView(getContext());
         emptyView.setImageResource(R.mipmap.empty);
         swipeRefreshGridView.setEmptyView(emptyView);
 ```
-或
-```java
-        swipeRefreshListView.setEmptyText("数据呢？");
-```
 
 #使用Gradle构建时添加一下依赖即可:
 ```javascript
-compile 'com.mylhyl:pullrefreshlayout:1.0.0'
+compile 'com.mylhyl:pullrefreshlayout:1.1.0'
 ```
