@@ -22,7 +22,7 @@ public final class FooterLayout extends FooterLayoutBase {
         LinearLayout root = (LinearLayout) v;
         root.setOrientation(HORIZONTAL);
         root.setGravity(Gravity.CENTER);
-        root.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, pxTdp(100)));
+        root.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, pxTdp(50)));
 
         mProgressBar = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmallInverse);
         root.addView(mProgressBar, new AbsListView.LayoutParams(

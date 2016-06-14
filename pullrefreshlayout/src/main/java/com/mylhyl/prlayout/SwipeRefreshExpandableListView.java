@@ -13,7 +13,7 @@ import com.mylhyl.prlayout.internal.OnScrollAbsListListener;
 
 /**
  * SwipeRefreshLayout 包含 ExpandableListView 布局<br>
- * 如须自定义加载框，可继承此类重写 {@link #createFooter(ViewGroup)}  createFooter}
+ * 如须自定义加载框，可继承此类重写 {@link #getFooterResource()}  getFooterResource}
  * <p>Created by hupei on 2016/5/16.
  */
 public class SwipeRefreshExpandableListView extends SwipeRefreshAbsListView<ExpandableListView> {

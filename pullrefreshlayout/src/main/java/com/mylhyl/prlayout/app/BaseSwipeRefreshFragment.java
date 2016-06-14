@@ -46,13 +46,13 @@ abstract class BaseSwipeRefreshFragment<T extends View> extends Fragment
     }
 
     /**
-     * 设置允许上拉加载，并注册监听器，重写{@link #onListLoad()}
+     * 设置允许上拉加载，重写{@link #onListLoad() onListLoad 方法实现上拉加载数据}
      *
      * @param enabled
      * @see SwipeRefreshListView#setEnabledLoad(boolean)
+     * @see SwipeRefreshListView#setOnListLoadListener(OnListLoadListener)
      */
     public final void setEnabledLoad(boolean enabled) {
-        mSwipeRefresh.setEnabledLoad(enabled);
         if (enabled)
             mSwipeRefresh.setOnListLoadListener(this);
     }

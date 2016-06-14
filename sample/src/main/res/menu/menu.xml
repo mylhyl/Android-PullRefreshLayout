@@ -2,6 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu"
-        android:showAsAction="withText|always"
+        android:showAsAction="always"
         android:title="清空" />
 </menu>

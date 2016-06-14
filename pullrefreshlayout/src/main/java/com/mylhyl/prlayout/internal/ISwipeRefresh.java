@@ -6,6 +6,8 @@ import android.view.View;
  * Created by hupei on 2016/5/18.
  */
 public interface ISwipeRefresh<T> {
+    void setFooterResource(int resource);
+
     void setEmptyText(CharSequence text);
 
     void setEmptyText(int resId);

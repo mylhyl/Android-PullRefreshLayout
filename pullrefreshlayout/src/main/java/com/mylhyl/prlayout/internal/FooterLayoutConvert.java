@@ -10,7 +10,7 @@ import android.widget.TextView;
  * 转换自定义上拉加载 View
  * Created by hupei on 2016/5/19.
  */
-public final class FooterLayoutConvert extends FooterLayoutBase implements IFooterLayout {
+public final class FooterLayoutConvert extends FooterLayoutBase {
 
     public FooterLayoutConvert(Context context, View v) {
         super(context, v);

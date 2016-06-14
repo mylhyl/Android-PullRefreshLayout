@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -25,7 +26,7 @@ import com.mylhyl.prlayout.internal.OnListLoadListener;
  * <p/>
  * <pre>
  * 此处主要封装以下几点：
- * 1.手动显示刷新动画 {@link #showRefreshHeader}
+ * 1.手动刷新 {@link #autoRefresh() autoRefresh}
  * 2.支持上拉加载，并可自定义
  * 3.解决 SwipeRefreshLayout 与可滑动控件使用过程中冲突的问题
  * </pre>
@@ -48,7 +49,8 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     private LoadSwipeRefresh mLoadSwipeRefresh;
     private T mScrollView;
     private View mEmptyView;
-    protected View mFooterView;
+    private View mFooterView;
+    private int mFooterResource;
 
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
     private OnListLoadListener mOnListLoadListener;
@@ -187,43 +189,49 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
         mLoadSwipeRefresh.setOnRefreshListener(listener);
     }
 
-    /**
-     * 注册上拉加载事件
-     *
-     * @param onListLoadListener
-     */
     public final void setOnListLoadListener(OnListLoadListener onListLoadListener) {
         this.mOnListLoadListener = onListLoadListener;
-        setEnabledLoad(true);
+        setEnabledLoad(mOnListLoadListener != null);
         addFooterView();
     }
 
     private void addFooterView() {
-        if (mFooterView == null) {
-            mFooterView = createFooter(this);//创建上拉加载 View
+        if (mFooterView == null && mOnListLoadListener != null) {
+            createFooter();//创建上拉加载 View
             if (mFooterView == null)
-                throw new RuntimeException("method onCreateFooterView cannot return null");
+                throw new NullPointerException("method onCreateFooterView cannot return null");
             //如是自定义 FooterView 的，则转换
             boolean b = mFooterView instanceof IFooterLayout;
             if (!b) {
                 mFooterView = new FooterLayoutConvert(getContext(), mFooterView);
-                addView(mFooterView);
             }
+            addView(mFooterView);
             hideFooter();
         }
     }
 
+    private void createFooter() {
+        if ((mFooterResource = getFooterResource()) > 0) {
+            mFooterView = LayoutInflater.from(getContext()).inflate(mFooterResource, this, false);
+        } else {
+            FooterLayout footerLayout = new FooterLayout(getContext());
+            footerLayout.setFooterText("加载数据中...");
+            mFooterView = footerLayout;
+        }
+    }
+
+    @Override
+    public void setFooterResource(int resource) {
+        mFooterResource = resource;
+    }
+
     /**
-     * 创建上拉加载 view 子类可重写
+     * 获取自定义上拉加载 layoutResource，子类可重写
      *
-     * @param root
      * @return
      */
-    protected View createFooter(ViewGroup root) {
-        FooterLayout footerLayout = new FooterLayout(getContext());
-        footerLayout.setFooterText("加载数据中...");
-        root.addView(footerLayout);
-        return footerLayout;
+    protected int getFooterResource() {
+        return mFooterResource;
     }
 
     @Override
@@ -245,24 +253,18 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     @Override
     public final void setLoading(boolean loading) {
         this.mLoading = loading;
-        if (mFooterView != null) {
-            if (mLoading) showFooter();
-            else hideFooter();
-        }
+        if (mLoading) showFooter();
+        else hideFooter();
     }
 
-    /**
-     * 显示上拉加载
-     */
     private void showFooter() {
-        mFooterView.setVisibility(VISIBLE);
+        if (mFooterView != null)
+            mFooterView.setVisibility(VISIBLE);
     }
 
-    /**
-     * 隐藏上拉加载
-     */
     private void hideFooter() {
-        mFooterView.setVisibility(GONE);
+        if (mFooterView != null)
+            mFooterView.setVisibility(GONE);
     }
 
     @Override
@@ -287,10 +289,11 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
 
     @Override
     public IFooterLayout getFooterLayout() {
-        addFooterView();
+        if (mFooterView == null)
+            throw new NullPointerException("mFooterView is null please call after setOnListLoadListener");
         if (mFooterView instanceof IFooterLayout)
             return (IFooterLayout) mFooterView;
-        return null;
+        throw new RuntimeException("mFooterView is no interface IFooterLayout");
     }
 
     LoadSwipeRefresh getLoadSwipeRefresh() {

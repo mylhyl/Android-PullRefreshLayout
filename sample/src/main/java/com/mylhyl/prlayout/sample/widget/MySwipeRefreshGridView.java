@@ -22,8 +22,7 @@ public class MySwipeRefreshGridView extends SwipeRefreshGridView {
     }
 
     @Override
-    protected View createFooter(ViewGroup root) {
-        //自定义上拉加载，第二个参数必须为 root ，第三个参数必须为 false
-        return LayoutInflater.from(getContext()).inflate(R.layout.swipe_refresh_footer, root, false);
+    protected int getFooterResource() {
+        return R.layout.swipe_refresh_footer;
     }
 }

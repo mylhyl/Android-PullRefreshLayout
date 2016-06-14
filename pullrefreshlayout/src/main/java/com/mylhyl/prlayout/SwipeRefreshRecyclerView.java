@@ -8,6 +8,7 @@ import com.mylhyl.prlayout.internal.OnScrollRecyclerViewListener;
 
 /**
  * SwipeRefreshLayout 加 RecyclerView 布局<br>
+ * 如须自定义加载框，可继承此类重写 {@link #getFooterResource()}  getFooterResource}方法
  * <p> Created by hupei on 2016/5/12.
  */
 public class SwipeRefreshRecyclerView extends BaseSwipeRefresh<RecyclerView> {
@@ -45,7 +46,6 @@ public class SwipeRefreshRecyclerView extends BaseSwipeRefresh<RecyclerView> {
         recyclerView.setId(android.R.id.list);
         return recyclerView;
     }
-
 
     private void registerAdapterDataObserver(RecyclerView.Adapter adapter) {
         mEmptyDataSetAdapter = adapter;

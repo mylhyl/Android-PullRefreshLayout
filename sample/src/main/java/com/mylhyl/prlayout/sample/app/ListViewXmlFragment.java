@@ -14,9 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.mylhyl.prlayout.SwipeRefreshListView;
 import com.mylhyl.prlayout.internal.IFooterLayout;
 import com.mylhyl.prlayout.internal.OnListLoadListener;
-import com.mylhyl.prlayout.SwipeRefreshListView;
 import com.mylhyl.prlayout.sample.R;
 
 import java.util.ArrayList;
@@ -49,10 +49,6 @@ public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         swipeRefreshListView = (SwipeRefreshListView) view.findViewById(R.id.swipeRefresh);
-        IFooterLayout footerLayout = swipeRefreshListView.getFooterLayout();
-        footerLayout.setFooterText("set自定义加载");
-        footerLayout.setIndeterminateDrawable(getResources().getDrawable(R.drawable.footer_progressbar));
-        swipeRefreshListView.setEmptyText("数据呢？");
     }
 
     @Override
@@ -62,6 +58,11 @@ public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.
         swipeRefreshListView.setOnItemClickListener(this);
         swipeRefreshListView.setOnListLoadListener(this);
         swipeRefreshListView.setOnRefreshListener(this);
+
+        IFooterLayout footerLayout = swipeRefreshListView.getFooterLayout();
+        footerLayout.setFooterText("set自定义加载");
+        footerLayout.setIndeterminateDrawable(getResources().getDrawable(R.drawable.footer_progressbar));
+        swipeRefreshListView.setEmptyText("数据呢？");
 
         for (int i = 0; i < footerIndex; i++) {
             objects.add("数据 = " + i);

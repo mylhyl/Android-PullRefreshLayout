@@ -29,7 +29,7 @@ public class GridViewXmlFragment extends Fragment implements SwipeRefreshLayout.
     private ArrayAdapter<String> adapter;
     private List<String> objects = new ArrayList<>();
     private int index;
-    private int footerIndex = 25;
+    private int footerIndex = 38;
 
     public GridViewXmlFragment() {
     }
@@ -87,7 +87,7 @@ public class GridViewXmlFragment extends Fragment implements SwipeRefreshLayout.
         swipeRefreshGridView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                int count = footerIndex + 5;
+                int count = footerIndex + 15;
                 for (int i = footerIndex; i < count; i++) {
                     objects.add("上拉 = " + i);
                 }

@@ -1,5 +1,6 @@
 package com.mylhyl.prlayout.sample.app;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.mylhyl.prlayout.app.SwipeRefreshListFragment;
+import com.mylhyl.prlayout.internal.IFooterLayout;
 import com.mylhyl.prlayout.sample.R;
 
 import java.util.ArrayList;
@@ -32,8 +34,15 @@ public class DemoSwipeRefreshListFragment extends SwipeRefreshListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-        getSwipeRefreshLayout().autoRefresh();
+        getSwipeRefreshLayout().setFooterResource(R.layout.swipe_refresh_footer);
         setEnabledLoad(true);
+
+        IFooterLayout footerLayout = getSwipeRefreshLayout().getFooterLayout();
+        footerLayout.setFooterText("加载更多数据...");
+        footerLayout.setFooterTextSize(18);
+        footerLayout.setFooterTextColor(Color.GREEN);
+
+        getSwipeRefreshLayout().autoRefresh();
 
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, objects);
         setListAdapter(adapter);

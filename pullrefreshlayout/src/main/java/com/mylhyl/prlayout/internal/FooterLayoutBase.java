@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -30,9 +31,8 @@ public abstract class FooterLayoutBase extends LinearLayout implements IFooterLa
         createFooter((ViewGroup) v);
     }
 
-    protected int pxTdp(int height) {
-        float scale = getResources().getDisplayMetrics().density;
-        return (int) (height / scale + 0.5f);
+    protected int pxTdp(int size) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, size, getResources().getDisplayMetrics());
     }
 
     @Override
