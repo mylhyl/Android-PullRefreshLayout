@@ -105,3 +105,15 @@ bintray {
         publish = true //是否发布
     }
 }
+
+task makeJar(type: Copy) {
+    delete 'build/libs/pullrefreshlayout.jar'
+    from('build/intermediates/bundles/release/')
+    into('build/libs/')
+    include('classes.jar')
+    rename ('classes.jar', 'pullrefreshlayout.jar')
+    exclude('test/', 'androidTest/', 'BuildConfig.class', 'R.class')
+    exclude{ it.name.startsWith('R$');}
+}
+
+makeJar.dependsOn(build)
