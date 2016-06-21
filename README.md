@@ -72,3 +72,5 @@ compile 'com.mylhyl:pullrefreshlayout:1.1.0'
 ```
 #### 如果使用eclipse[可以点击这里下载jar包](preview/pullrefreshlayout.jar)
 #### [下载APK体验](preview/sample-debug.apk)
+
+QQ交流群:435173211
