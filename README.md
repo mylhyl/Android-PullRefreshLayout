@@ -92,4 +92,7 @@ compile 'com.mylhyl:pullrefreshlayout:1.2.1'
 
 ##### 1.2.1
   * 修复嵌套`ViewPage`引起的冲突
+  
+##### 1.2.2
+  * 增加`attrs`属性 可在`xml`中配置`footer`参数
 

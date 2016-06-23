@@ -70,9 +70,9 @@ public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.
 
         initListViewHead();
 
-        IFooterLayout footerLayout = swipeRefreshListView.getFooterLayout();
-        footerLayout.setFooterText("set自定义加载");
-        footerLayout.setIndeterminateDrawable(getResources().getDrawable(R.drawable.footer_progressbar));
+//        IFooterLayout footerLayout = swipeRefreshListView.getFooterLayout();
+//        footerLayout.setFooterText("set自定义加载");
+//        footerLayout.setIndeterminateDrawable(getResources().getDrawable(R.drawable.footer_progressbar));
         swipeRefreshListView.setEmptyText("数据呢？");
 
         for (int i = 0; i < footerIndex; i++) {

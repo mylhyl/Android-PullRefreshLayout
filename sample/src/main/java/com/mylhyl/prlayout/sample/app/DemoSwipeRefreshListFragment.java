@@ -34,6 +34,7 @@ public class DemoSwipeRefreshListFragment extends SwipeRefreshListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
+        //注意在 setOnListLoadListener 或 setEnabledLoad 之前使用
         getSwipeRefreshLayout().setFooterResource(R.layout.swipe_refresh_footer);
         setEnabledLoad(true);
 

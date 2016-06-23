@@ -2,8 +2,11 @@ package com.mylhyl.prlayout;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -42,6 +45,8 @@ abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements 
      */
     protected abstract T createScrollView(Context context, AttributeSet attrs);
 
+    private static final String DEFAULT_FOOTER_TEXT = "加载数据中...";
+
     private boolean mLoading;// 是否处于上拉加载状态中
     private boolean mEnabledLoad;// 是否允许上拉加载
     private FrameLayout mRefreshLayoutWrapper;
@@ -50,6 +55,8 @@ abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements 
     private View mEmptyView;
     private View mFooterView;
     private int mFooterResource;
+    private String mFooterText;
+    private Drawable mFooterIndeterminateDrawable;
 
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
     private OnListLoadListener mOnListLoadListener;
@@ -64,13 +71,13 @@ abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements 
 
     public BaseSwipeRefresh(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context, attrs);
+        init(context, attrs, defStyleAttr, 0);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public BaseSwipeRefresh(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init(context, attrs);
+        init(context, attrs, defStyleAttr, defStyleRes);
     }
 
     /**
@@ -79,14 +86,28 @@ abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements 
      * @param context
      * @param attrs
      */
-    private void init(Context context, AttributeSet attrs) {
+    private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.prLayout, defStyleAttr, defStyleRes);
+        if (a != null) {
+            mFooterResource = a.getResourceId(R.styleable.prLayout_footer_layout, 0);
+            mFooterText = a.getString(R.styleable.prLayout_footer_text);
+            mFooterIndeterminateDrawable = a.getDrawable(R.styleable.prLayout_footer_indeterminate_drawable);
+
+            a.recycle();
+        }
+
+        if (TextUtils.isEmpty(mFooterText))
+            mFooterText = DEFAULT_FOOTER_TEXT;
+
         setOrientation(LinearLayout.VERTICAL);
         setGravity(Gravity.CENTER);
 
         mLoadSwipeRefresh = new LoadSwipeRefresh(context, attrs);
 
         mScrollView = createScrollView(context, attrs);
-        mEmptyView = createEmptyView(context);
+        if (mEmptyView == null)
+            mEmptyView = createEmptyView(context);
         addSwipeRefreshView(context, mLoadSwipeRefresh, mScrollView, mEmptyView);
     }
 
@@ -221,7 +242,9 @@ abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements 
             mFooterView = LayoutInflater.from(getContext()).inflate(mFooterResource, this, false);
         } else {
             FooterLayout footerLayout = new FooterLayout(getContext());
-            footerLayout.setFooterText("加载数据中...");
+            footerLayout.setFooterText(mFooterText);
+            if (mFooterIndeterminateDrawable != null)
+                footerLayout.setIndeterminateDrawable(mFooterIndeterminateDrawable);
             mFooterView = footerLayout;
         }
     }

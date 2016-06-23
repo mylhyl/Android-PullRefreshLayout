@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.mylhyl.swiperefreshLayout.sample"
+        applicationId "com.mylhyl.prlayout.sample"
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
