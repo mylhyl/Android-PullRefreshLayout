@@ -1,17 +1,26 @@
 package com.mylhyl.prlayout.sample.app;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mylhyl.prlayout.SwipeRefreshListView;
@@ -59,6 +68,8 @@ public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.
         swipeRefreshListView.setOnListLoadListener(this);
         swipeRefreshListView.setOnRefreshListener(this);
 
+        initListViewHead();
+
         IFooterLayout footerLayout = swipeRefreshListView.getFooterLayout();
         footerLayout.setFooterText("set自定义加载");
         footerLayout.setIndeterminateDrawable(getResources().getDrawable(R.drawable.footer_progressbar));
@@ -70,6 +81,100 @@ public class ListViewXmlFragment extends Fragment implements SwipeRefreshLayout.
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, objects);
         swipeRefreshListView.setAdapter(adapter);
 
+    }
+
+    private int mCurrentPosition;
+    private ViewPager mViewPager;
+    private final Handler mAutoPlayHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            mCurrentPosition++;
+            if (mViewPager != null)
+                mViewPager.setCurrentItem(mCurrentPosition);
+            mAutoPlayHandler.sendEmptyMessageDelayed(1000, 3000);
+        }
+    };
+
+    private void initListViewHead() {
+        if (mViewPager == null) {
+            mViewPager = new ViewPager(getContext());
+            mViewPager.setLayoutParams(new AbsListView.LayoutParams(
+                    AbsListView.LayoutParams.MATCH_PARENT, (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics())));
+        }
+        mViewPager.setAdapter(new PagerAdapter() {
+            @Override
+            public int getCount() {
+                return 4 + 2;
+            }
+
+            @Override
+            public boolean isViewFromObject(View view, Object object) {
+                return view == object;
+            }
+
+            @Override
+            public void destroyItem(ViewGroup container, int position, Object object) {
+            }
+
+            @Override
+            public Object instantiateItem(ViewGroup container, int position) {
+                int toRealPosition = toRealPosition(position);
+                TextView textView = (TextView) container.getChildAt(toRealPosition);
+                if (textView == null) {
+                    textView = new TextView(getContext());
+                    textView.setTextColor(Color.RED);
+                    textView.setTextSize(18);
+                    textView.setGravity(Gravity.CENTER);
+                    container.addView(textView);
+                }
+                textView.setText("position=" + toRealPosition);
+                return textView;
+            }
+        });
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mCurrentPosition = position % (4 + 2);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                if (state == ViewPager.SCROLL_STATE_IDLE) {
+                    int current = mViewPager.getCurrentItem();
+                    int last = mViewPager.getAdapter().getCount() - 2;
+                    if (current == 0) {
+                        mViewPager.setCurrentItem(last, false);
+                    } else if (current == last + 1) {
+                        mViewPager.setCurrentItem(1, false);
+                    }
+                }
+            }
+        });
+        mViewPager.setCurrentItem(1, false);
+        swipeRefreshListView.getScrollView().addHeaderView(mViewPager);
+        mAutoPlayHandler.sendEmptyMessageDelayed(1000, 3000);
+    }
+
+    private int toRealPosition(int position) {
+        int realPosition = (position - 1) % 4;
+        if (realPosition < 0)
+            realPosition += 4;
+
+        return realPosition;
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (mAutoPlayHandler != null)
+            mAutoPlayHandler.removeMessages(1000);
+        super.onDestroyView();
     }
 
 
