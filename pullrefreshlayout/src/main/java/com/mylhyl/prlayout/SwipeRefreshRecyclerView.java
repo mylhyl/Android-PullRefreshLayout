@@ -29,7 +29,7 @@ public class SwipeRefreshRecyclerView extends BaseSwipeRefresh<RecyclerView> {
     public final void setAdapter(RecyclerView.Adapter adapter) {
         if (adapter == null)
             throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
-        getScrollView().setOnScrollListener(new OnScrollRecyclerViewListener(getLoadSwipeRefresh()));
+        getScrollView().setOnScrollListener(new OnScrollRecyclerViewListener(this));
         getScrollView().setAdapter(adapter);
         registerAdapterDataObserver(adapter);
     }

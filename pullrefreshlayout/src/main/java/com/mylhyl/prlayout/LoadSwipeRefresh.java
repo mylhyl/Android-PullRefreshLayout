@@ -16,8 +16,6 @@ final class LoadSwipeRefresh extends SwipeRefreshLayout {
 
     private int[] mColorResIds = COLOR_RES_IDS;
 
-    private ISwipeRefresh mISwipeRefresh;
-
     public LoadSwipeRefresh(Context context) {
         this(context, null);
     }
@@ -41,14 +39,5 @@ final class LoadSwipeRefresh extends SwipeRefreshLayout {
         setColorSchemeResources(colorResIds);
         // 首次加载显示下拉动画，关键在于源码中的 mUsingCustomStart = true
         setProgressViewOffset(scale, start, end);
-        mISwipeRefresh.setRefreshing(true);
-    }
-
-    public void setISwipeRefresh(ISwipeRefresh iSwipeRefresh) {
-        this.mISwipeRefresh = iSwipeRefresh;
-    }
-
-    public ISwipeRefresh getISwipeRefresh() {
-        return mISwipeRefresh;
     }
 }

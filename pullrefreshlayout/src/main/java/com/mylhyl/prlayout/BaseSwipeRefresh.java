@@ -84,7 +84,6 @@ abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements 
         setGravity(Gravity.CENTER);
 
         mLoadSwipeRefresh = new LoadSwipeRefresh(context, attrs);
-        mLoadSwipeRefresh.setISwipeRefresh(this);
 
         mScrollView = createScrollView(context, attrs);
         mEmptyView = createEmptyView(context);
@@ -116,16 +115,19 @@ abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements 
     @Override
     public final void autoRefresh() {
         mLoadSwipeRefresh.autoRefresh();
+        this.setRefreshing(true);
     }
 
     @Override
     public final void autoRefresh(int... colorResIds) {
         mLoadSwipeRefresh.autoRefresh(colorResIds);
+        this.setRefreshing(true);
     }
 
     @Override
     public final void autoRefresh(boolean scale, int start, int end, int... colorResIds) {
         mLoadSwipeRefresh.autoRefresh(scale, start, end, colorResIds);
+        this.setRefreshing(true);
     }
 
     @Override
@@ -277,6 +279,11 @@ abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements 
     }
 
     @Override
+    public void setEnabledSwipeRefresh(boolean enabled) {
+        mLoadSwipeRefresh.setEnabled(enabled);
+    }
+
+    @Override
     public final boolean isLoading() {
         return mLoading;
     }
@@ -298,9 +305,5 @@ abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements 
         if (mFooterView instanceof IFooterLayout)
             return (IFooterLayout) mFooterView;
         throw new RuntimeException("mFooterView is no interface IFooterLayout");
-    }
-
-    LoadSwipeRefresh getLoadSwipeRefresh() {
-        return mLoadSwipeRefresh;
     }
 }

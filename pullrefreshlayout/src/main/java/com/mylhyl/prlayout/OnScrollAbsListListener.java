@@ -9,15 +9,15 @@ import com.mylhyl.prlayout.internal.ISwipeRefresh;
  * Created by hupei on 2016/5/20.
  */
 final class OnScrollAbsListListener implements AbsListView.OnScrollListener {
-    private LoadSwipeRefresh mLoadSwipeRefresh;
+    private ISwipeRefresh mISwipeRefresh;
     private AbsListView.OnScrollListener mOnScrollListener;
 
-    public OnScrollAbsListListener(LoadSwipeRefresh loadSwipeRefresh) {
-        mLoadSwipeRefresh = loadSwipeRefresh;
+    public OnScrollAbsListListener(ISwipeRefresh iSwipeRefresh) {
+        mISwipeRefresh = iSwipeRefresh;
     }
 
-    public OnScrollAbsListListener(LoadSwipeRefresh loadSwipeRefresh, AbsListView.OnScrollListener onScrollListener) {
-        mLoadSwipeRefresh = loadSwipeRefresh;
+    public OnScrollAbsListListener(ISwipeRefresh iSwipeRefresh, AbsListView.OnScrollListener onScrollListener) {
+        mISwipeRefresh = iSwipeRefresh;
         mOnScrollListener = onScrollListener;
     }
 
@@ -45,13 +45,12 @@ final class OnScrollAbsListListener implements AbsListView.OnScrollListener {
         final View firstView = view.getChildAt(firstVisibleItem);
         // 当firstVisibleItem是第0位。如果firstView==null说明列表为空，需要刷新;或者top==0说明已经到达列表顶部
         if (firstVisibleItem == 0 && (firstView == null || firstView.getTop() == 0)) {
-            mLoadSwipeRefresh.setEnabled(true);
+            mISwipeRefresh.setEnabledSwipeRefresh(true);
         } else {
-            mLoadSwipeRefresh.setEnabled(false);
-            ISwipeRefresh iSwipeRefresh = mLoadSwipeRefresh.getISwipeRefresh();
-            if (iSwipeRefresh.isEnabledLoad() && !iSwipeRefresh.isLoading()
+            mISwipeRefresh.setEnabledSwipeRefresh(false);
+            if (mISwipeRefresh.isEnabledLoad() && !mISwipeRefresh.isLoading()
                     && view.getLastVisiblePosition() == (totalItemCount - 1)) {
-                iSwipeRefresh.loadData();// 滑动底部自动执行上拉加载
+                mISwipeRefresh.loadData();// 滑动底部自动执行上拉加载
             }
         }
 

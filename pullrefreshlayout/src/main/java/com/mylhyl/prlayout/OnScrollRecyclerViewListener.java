@@ -9,15 +9,15 @@ import com.mylhyl.prlayout.internal.ISwipeRefresh;
  * Created by hupei on 2016/5/20.
  */
 final class OnScrollRecyclerViewListener extends RecyclerView.OnScrollListener {
-    private LoadSwipeRefresh mLoadSwipeRefresh;
+    private ISwipeRefresh mISwipeRefresh;
     private RecyclerView.OnScrollListener mOnScrollListener;
 
-    public OnScrollRecyclerViewListener(LoadSwipeRefresh loadSwipeRefresh) {
-        mLoadSwipeRefresh = loadSwipeRefresh;
+    public OnScrollRecyclerViewListener(ISwipeRefresh iSwipeRefresh) {
+        mISwipeRefresh = iSwipeRefresh;
     }
 
-    public OnScrollRecyclerViewListener(LoadSwipeRefresh loadSwipeRefresh, RecyclerView.OnScrollListener onScrollListener) {
-        mLoadSwipeRefresh = loadSwipeRefresh;
+    public OnScrollRecyclerViewListener(ISwipeRefresh iSwipeRefresh, RecyclerView.OnScrollListener onScrollListener) {
+        mISwipeRefresh = iSwipeRefresh;
         mOnScrollListener = onScrollListener;
     }
 
@@ -33,13 +33,12 @@ final class OnScrollRecyclerViewListener extends RecyclerView.OnScrollListener {
         super.onScrolled(recyclerView, dx, dy);
         System.out.println("dx=" + dx + "  dy=" + dy);
         if (isFirstItemVisible(recyclerView))
-            mLoadSwipeRefresh.setEnabled(true);
+            mISwipeRefresh.setEnabledSwipeRefresh(true);
         else {
-            mLoadSwipeRefresh.setEnabled(false);
-            ISwipeRefresh iSwipeRefresh = mLoadSwipeRefresh.getISwipeRefresh();
-            if (iSwipeRefresh.isEnabledLoad() && !iSwipeRefresh.isLoading()
+            mISwipeRefresh.setEnabledSwipeRefresh(false);
+            if (mISwipeRefresh.isEnabledLoad() && !mISwipeRefresh.isLoading()
                     && isLastItemVisible(recyclerView)) {
-                iSwipeRefresh.loadData();// 滑动底部自动执行上拉加载
+                mISwipeRefresh.loadData();// 滑动底部自动执行上拉加载
             }
         }
 

@@ -46,6 +46,13 @@ public interface ISwipeRefresh<T> {
     void setEnabledLoad(boolean enabled);
 
     /**
+     * 禁用 SwipeRefreshLayout {@linkplain SwipeRefreshLayout#setEnabled(boolean)}
+     *
+     * @param enabled
+     */
+    void setEnabledSwipeRefresh(boolean enabled);
+
+    /**
      * 是否在上拉加载中
      *
      * @return
@@ -67,4 +74,5 @@ public interface ISwipeRefresh<T> {
     T getScrollView();
 
     IFooterLayout getFooterLayout();
+
 }

@@ -34,7 +34,7 @@ public class SwipeRefreshExpandableListView extends SwipeRefreshAbsListView<Expa
         mAdapter = adapter;
         if (mAdapter == null)
             throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
-        getScrollView().setOnScrollListener(new OnScrollAbsListListener(getLoadSwipeRefresh()));
+        getScrollView().setOnScrollListener(new OnScrollAbsListListener(this));
         getScrollView().setAdapter(mAdapter);
         registerDataSetObserver(new ExpandableListConnector(mAdapter));
     }
