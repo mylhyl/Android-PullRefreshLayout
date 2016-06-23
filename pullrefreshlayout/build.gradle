@@ -10,7 +10,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName "1.2.0"
     }
     buildTypes {
         release {
@@ -32,7 +32,7 @@ dependencies {
 def siteUrl = 'https://github.com/mylhyl/Android-PullRefreshLayout'
 def gitUrl = 'https://github.com/mylhyl/Android-PullRefreshLayout.git'
 group = "com.mylhyl"
-version = "1.1.0"
+version = "1.2.0"
 
 install {
     repositories.mavenInstaller {

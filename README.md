@@ -68,9 +68,20 @@
 
 ####使用Gradle构建时添加一下依赖即可:
 ```javascript
-compile 'com.mylhyl:pullrefreshlayout:1.1.0'
+compile 'com.mylhyl:pullrefreshlayout:1.2.0'
 ```
 #### 如果使用eclipse[可以点击这里下载jar包](preview/pullrefreshlayout.jar)
 #### [下载APK体验](preview/sample-debug.apk)
 
-QQ交流群:435173211
+### QQ交流群:435173211
+
+#### 更新日志
+##### 1.0.0
+  * 初始版本
+
+##### 1.1.0
+  * 修改类访问权
+
+##### 1.2.0
+  * 优化内部业务逻辑
+
