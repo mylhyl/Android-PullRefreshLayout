@@ -10,7 +10,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
-        versionName "1.2.2"
+        versionName "1.2.3"
     }
     buildTypes {
         release {
@@ -25,14 +25,13 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:recyclerview-v7:23.3.0'
 }
 
 def siteUrl = 'https://github.com/mylhyl/Android-PullRefreshLayout'
 def gitUrl = 'https://github.com/mylhyl/Android-PullRefreshLayout.git'
 group = "com.mylhyl"
-version = "1.2.2"
+version = "1.2.3"
 
 install {
     repositories.mavenInstaller {
@@ -107,13 +106,14 @@ bintray {
 }
 
 task makeJar(type: Copy) {
-    delete 'build/libs/pullrefreshlayout.jar'
+    def jarName = 'pullrefreshlayout-' + version + '.jar'
+    delete 'build/libs/' + jarName
     from('build/intermediates/bundles/release/')
     into('build/libs/')
     include('classes.jar')
-    rename ('classes.jar', 'pullrefreshlayout.jar')
+    rename('classes.jar', jarName)
     exclude('test/', 'androidTest/', 'BuildConfig.class', 'R.class')
-    exclude{ it.name.startsWith('R$');}
+    exclude { it.name.startsWith('R$'); }
 }
 
 makeJar.dependsOn(build)

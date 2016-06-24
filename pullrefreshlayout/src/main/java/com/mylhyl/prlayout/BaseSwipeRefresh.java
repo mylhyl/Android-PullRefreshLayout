@@ -131,6 +131,7 @@ abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements 
                 LayoutParams.MATCH_PARENT));
 
         addView(loadSwipeRefresh, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1));
+        loadSwipeRefresh.setSwipeableChildren(scrollView, emptyView);
     }
 
     @Override
@@ -140,14 +141,8 @@ abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements 
     }
 
     @Override
-    public final void autoRefresh(int... colorResIds) {
-        mLoadSwipeRefresh.autoRefresh(colorResIds);
-        this.setRefreshing(true);
-    }
-
-    @Override
-    public final void autoRefresh(boolean scale, int start, int end, int... colorResIds) {
-        mLoadSwipeRefresh.autoRefresh(scale, start, end, colorResIds);
+    public final void autoRefresh(boolean scale, int start, int end) {
+        mLoadSwipeRefresh.autoRefresh(scale, start, end);
         this.setRefreshing(true);
     }
 
@@ -302,11 +297,6 @@ abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements 
     }
 
     @Override
-    public void setEnabledSwipeRefresh(boolean enabled) {
-        mLoadSwipeRefresh.setEnabled(enabled);
-    }
-
-    @Override
     public final boolean isLoading() {
         return mLoading;
     }
@@ -328,5 +318,10 @@ abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements 
         if (mFooterView instanceof IFooterLayout)
             return (IFooterLayout) mFooterView;
         throw new RuntimeException("mFooterView is no interface IFooterLayout");
+    }
+
+    @Override
+    public SwipeRefreshLayout getSwipeRefreshLayout() {
+        return mLoadSwipeRefresh;
     }
 }

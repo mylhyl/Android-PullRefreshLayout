@@ -1,6 +1,5 @@
 package com.mylhyl.prlayout;
 
-import android.view.View;
 import android.widget.AbsListView;
 
 import com.mylhyl.prlayout.internal.ISwipeRefresh;
@@ -8,7 +7,7 @@ import com.mylhyl.prlayout.internal.ISwipeRefresh;
 /**
  * Created by hupei on 2016/5/20.
  */
-final class OnScrollAbsListListener implements AbsListView.OnScrollListener {
+public final class OnScrollAbsListListener implements AbsListView.OnScrollListener {
     private ISwipeRefresh mISwipeRefresh;
     private AbsListView.OnScrollListener mOnScrollListener;
 
@@ -42,17 +41,12 @@ final class OnScrollAbsListListener implements AbsListView.OnScrollListener {
          visibleItemCount：当前能看见的列表项个数（小半个也算）
          totalItemCount：列表项共数
          */
-        final View firstView = view.getChildAt(firstVisibleItem);
-        // 当firstVisibleItem是第0位。如果firstView==null说明列表为空，需要刷新;或者top==0说明已经到达列表顶部
-        if (firstVisibleItem == 0 && (firstView == null || firstView.getTop() == 0)) {
-            mISwipeRefresh.setEnabledSwipeRefresh(true);
-        } else {
-            mISwipeRefresh.setEnabledSwipeRefresh(false);
-            if (mISwipeRefresh.isEnabledLoad() && !mISwipeRefresh.isLoading()
-                    && view.getLastVisiblePosition() == (totalItemCount - 1)) {
-                mISwipeRefresh.loadData();// 滑动底部自动执行上拉加载
-            }
+        if (firstVisibleItem > 0
+                && mISwipeRefresh.isEnabledLoad() && !mISwipeRefresh.isLoading()
+                && view.getLastVisiblePosition() == (totalItemCount - 1)) {
+            mISwipeRefresh.loadData();// 滑动底部自动执行上拉加载
         }
+
 
         if (null != mOnScrollListener)
             mOnScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);

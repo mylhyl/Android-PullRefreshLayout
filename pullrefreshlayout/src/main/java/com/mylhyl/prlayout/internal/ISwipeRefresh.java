@@ -9,9 +9,7 @@ import android.view.View;
 public interface ISwipeRefresh<T> {
     void autoRefresh();
 
-    void autoRefresh(int... colorResIds);
-
-    void autoRefresh(boolean scale, int start, int end, int... colorResIds);
+    void autoRefresh(boolean scale, int start, int end);
 
     void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener);
 
@@ -46,13 +44,6 @@ public interface ISwipeRefresh<T> {
     void setEnabledLoad(boolean enabled);
 
     /**
-     * 禁用 SwipeRefreshLayout {@linkplain SwipeRefreshLayout#setEnabled(boolean)}
-     *
-     * @param enabled
-     */
-    void setEnabledSwipeRefresh(boolean enabled);
-
-    /**
      * 是否在上拉加载中
      *
      * @return
@@ -67,7 +58,7 @@ public interface ISwipeRefresh<T> {
     boolean isEnabledLoad();
 
     /**
-     * 获取可滑动的 View：ListView、ExpandableListView、GridView等
+     * 获取可滑动的 ListView、ExpandableListView、GridView、RecyclerView
      *
      * @return
      */
@@ -75,4 +66,5 @@ public interface ISwipeRefresh<T> {
 
     IFooterLayout getFooterLayout();
 
+    SwipeRefreshLayout getSwipeRefreshLayout();
 }

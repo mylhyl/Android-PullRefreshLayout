@@ -8,7 +8,7 @@ import com.mylhyl.prlayout.internal.ISwipeRefresh;
 /**
  * Created by hupei on 2016/5/20.
  */
-final class OnScrollRecyclerViewListener extends RecyclerView.OnScrollListener {
+public final class OnScrollRecyclerViewListener extends RecyclerView.OnScrollListener {
     private ISwipeRefresh mISwipeRefresh;
     private RecyclerView.OnScrollListener mOnScrollListener;
 
@@ -31,15 +31,11 @@ final class OnScrollRecyclerViewListener extends RecyclerView.OnScrollListener {
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
-        System.out.println("dx=" + dx + "  dy=" + dy);
-        if (isFirstItemVisible(recyclerView))
-            mISwipeRefresh.setEnabledSwipeRefresh(true);
-        else {
-            mISwipeRefresh.setEnabledSwipeRefresh(false);
-            if (mISwipeRefresh.isEnabledLoad() && !mISwipeRefresh.isLoading()
-                    && isLastItemVisible(recyclerView)) {
-                mISwipeRefresh.loadData();// 滑动底部自动执行上拉加载
-            }
+
+        if (!isFirstItemVisible(recyclerView)
+                && mISwipeRefresh.isEnabledLoad() && !mISwipeRefresh.isLoading()
+                && isLastItemVisible(recyclerView)) {
+            mISwipeRefresh.loadData();// 滑动底部自动执行上拉加载
         }
 
         if (null != mOnScrollListener)

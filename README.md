@@ -68,13 +68,18 @@
         emptyView.setImageResource(R.mipmap.empty);
         swipeRefreshGridView.setEmptyView(emptyView);
 ```
+调用`autoRefresh`自动刷新，那么注册`ListView`长按事件怎么办？好办提供了方法`getScrollView()`取出
+又有问题了既然能取到`ListView`那`SwipeRefreshLayout`是不是也可以取到呢？
+答案是肯定的，方法`getSwipeRefreshLayout`取出，你可以随心所欲了，设置下拉圆圈的颜色、大小等。
+关于更多公开方法见 [ISwipeRefresh](pullrefreshlayout/src/main/java/com/mylhyl/prlayout/internal/ISwipeRefresh.java)
 
 ####使用Gradle构建时添加一下依赖即可:
 ```javascript
-compile 'com.mylhyl:pullrefreshlayout:1.2.1'
+compile 'com.mylhyl:pullrefreshlayout:1.2.3'
 ```
-#### 如果使用eclipse[可以点击这里下载jar包](preview/pullrefreshlayout.jar)
-但是由于`jar`不能打包`res`原因，将影响`xml`属性的使用，可以`clone`源码，以`library`方式引用
+#### 如果使用eclipse[可以点击这里下载jar包](preview/pullrefreshlayout-1.2.3.jar)
+但是由于`jar`不能打包`res`原因，将影响`xml`属性的使用，手动拷贝`attrs`到自己的项目中.
+也可以`clone`源码，然后在 eclipse 中用`library`方式引用
      
 #### [下载APK体验](preview/sample-debug.apk)
 
@@ -95,4 +100,7 @@ compile 'com.mylhyl:pullrefreshlayout:1.2.1'
   
 ##### 1.2.2
   * 增加`attrs`属性 可在`xml`中配置`footer`参数
+
+##### 1.2.3
+  * 子视图上滑冲突方案由`OnScrollListener`改为重写`canChildScrollUp`
 
